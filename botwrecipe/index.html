@@ -92,7 +92,7 @@
 							})
 							// dish
 							var effects = row[cols['main effect']].v
-							if (row[cols['second effect']] && row[cols['second effect']].v)
+							if (row[cols['second effect']] && row[cols['second effect']].v && '--' != row[cols['second effect']].v)
 								effects += ' / ' + row[cols['second effect']].v
 							// merge material
 							var materialsMap = new Map()
