@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+		<script id="texts_zh"></script>
+		<script id="texts_en"></script>
+		<title>Wakfu中英文搜索器</title>
+	</head>
+	<body style="padding:15px;">
+		<div id="app" v-cloak class="page-container">
+			<div v-if="loading">載入中...</div>
+			<input ref="searchInput" v-if="!loading" v-model.trim="keyword" placeholder="搜尋Wakfu的中/英文關鍵字" class="form-input"/>
+			<table class="table table-striped table-hover" style="width:auto">
+				<tbody>
+					<tr class="active" v-for="item in searchResult">
+						<td>{{item.zh}}</td>
+						<td>{{item.en}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+		<script>
+			const MAX_RESULT = 10
+			zh = {}
+			en = {}
+			const app = new Vue({
+				el: '#app',
+				data: {
+					keyword: '',
+					searchResult: [],
+					loading: true,
+				},
+				created: function() {
+					document.getElementById('texts_zh').src = 'texts_zh.js'
+					document.getElementById('texts_en').src = 'texts_en.js'
+					window.onfocus = function() {
+						app.focus()
+					}
+				},
+				watch: {
+					keyword: function(val, oldVal) {
+						this.search()
+					}
+				},
+				methods: {
+					search: function() {
+						this.searchResult = []
+						if(!this.keyword)
+							return
+						const result = {}
+						let j = 0
+						const keyword = this.keyword.toLowerCase()
+						for(let i in zh) {
+							if(zh[i].indexOf(keyword) < 0 || j > MAX_RESULT) 
+								continue
+							result[i] = {
+								zh: zh[i],
+								en: en[i] || ''
+							}
+							j++
+						}
+						j = 0
+						for(let i in en) {
+							if(en[i].toLowerCase().indexOf(keyword) < 0 || j > MAX_RESULT) 
+								continue
+							result[i] = {
+								zh: zh[i] || '',
+								en: en[i]
+							}
+							j++
+						}
+						for(let i in result)
+							this.searchResult.push(result[i])
+					},
+					loaded() {
+						this.loading = false
+						this.search()
+						this.focus()
+					},
+					focus() {
+						setTimeout(() => this.$refs.searchInput.focus())
+					}
+				}
+			})
+
+			function loaded() {
+				if(Object.keys(zh).length || Object.keys(en).length)
+					app.loaded()
+			}
+		</script>
+	</body>
+</html>
