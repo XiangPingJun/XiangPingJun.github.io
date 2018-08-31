@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+		<script src="data.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+		<style>
+		.form-checkbox, .form-radio, .form-switch {
+			display: inline;
+			cursor: pointer;
+		}
+		.box {
+			position: absolute;
+			border: 3px solid brown;
+			display: inline-block;
+		}
+		</style>
+	</head>
+	<body style="padding:0 10px">
+		<div id="mouse-pos"></div>
+		<div id="app" style="display:flex">
+			<img src="Tyria_map.jpg" style="height:800px; margin-right:15px;"/><br/>
+			<div class="form-group">
+				Tyria大陸: 
+				<label v-for="(option, i) in data" class="form-radio">
+					<input type="radio" :name="'lv-1-radio-' + i" v-model="lv1Model" :value="i"/>
+					<i class="form-icon"></i> {{option.caption}}
+				</label>
+				<div style="margin:10px"></div>
+				
+				<label v-for="(option, i) in lv2Radio" class="form-radio">
+					<input type="radio" :name="'lv-2-radio-' + i" v-model="lv2Model"/>
+					<i class="form-icon"></i> {{option.caption}}
+				</label>
+				<div style="margin:10px"></div>
+				
+				<div v-for="box in selected.boxes" :style="boxStyle(box)" class="box"></div>
+				<img v-for="src in selected.imgs" :src="src"/>
+				<div v-html="selected.text"></div>
+			</div>
+		</div>
+
+		<script>
+		new Vue({
+			el: '#app',
+			data: { data, imgSrc:'', lv2Radio:[], text:'', lv1Model:null, lv2Model:null },
+			computed: {
+				selected() {
+					return this.lv2Radio[this.lv2Model] || this.data[this.lv1Model] || {}
+				}
+			},
+			methods: {
+				boxStyle(box) {
+					return {
+						left: box.pos[0], 
+						top: box.pos[1], 
+						width: box.pos[2] - box.pos[0], 
+						height: box.pos[3] - box.pos[1]
+					}
+				}
+			}
+		})
+		window.onmousemove = function(event) {
+			document.getElementById('mouse-pos').textContent = `(${event.pageX}, ${event.pageY})`
+		}
+		</script>
+	</body>
+</html>
