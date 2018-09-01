@@ -13,7 +13,8 @@
 		}
 
 		.box,
-		.box-caption {
+		.box-caption,
+		.image {
 			position: absolute;
 		}
 
@@ -43,7 +44,7 @@
 			</label>
 			<div style="margin:10px"></div>
 
-			<label v-for="(option, i) in lv2Radio" class="form-radio">
+			<label v-if="data[lv1Model]" v-for="(option, i) in data[lv1Model].children" class="form-radio">
 				<input type="radio" :name="'lv-2-radio-' + i" v-model="lv2Model" :value="i" />
 				<i class="form-icon"></i>{{option.caption}}
 			</label>
@@ -51,22 +52,22 @@
 
 			<div v-for="(box, i) in selected.boxes" :style="boxStyle(box, i)" class="box"></div>
 			<b v-for="(box, i) in selected.boxes" :style="boxNameStyle(box, i)" class="box-caption">{{box.name}}</b>
-			<img v-for="src in selected.imgs" :src="src" />
+			<img v-for="img in selected.imgs" :src="img.src" :style="{left:img.pos[0], top:img.pos[1]}" class="image" />
 			<div v-html="selected.text"></div>
 		</div>
 	</div>
 
 	<script>
-		let colors = ['#FF5722', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#00BCD4', '#009688', '#4CAF50', '#CDDC39', '#FFC107', '#FF9800', '#795548', '#607D8B']
+		let colors = ['#B71C1C', '#880E4F', '#6200EA', '#4A148C', '#311B92', '#0D47A1', '#01579B', '#006064', '#004D40', '#33691E', '#827717', '#E65100', '#4E342E', '#37474F']
 		function shuffleColors() {
 			colors.sort(() => 0.5 - Math.random())
 		}
 		new Vue({
 			el: '#app',
-			data: { data, imgSrc: '', lv2Radio: [], text: '', lv1Model: null, lv2Model: null },
+			data: { data, imgSrc: '', text: '', lv1Model: 0, lv2Model: null },
 			computed: {
 				selected() {
-					return this.lv2Radio[this.lv2Model] || this.data[this.lv1Model] || {}
+					return (this.data[this.lv1Model]) && this.data[this.lv1Model].children[this.lv2Model] || this.data[this.lv1Model] || {}
 				}
 			},
 			methods: {
