@@ -7,8 +7,8 @@ const _loc = {
 	'Orr古國': [253, 404, 347, 570]
 }
 const _img = {
-	'jormag.jpg': [559, 150],
-	'Icebrood.jpg': [564, 382],
+	'jormag.jpg': [400, 150],
+	'Icebrood.jpg': [400, 382],
 	'Zhaitan.jpg': [60, 590],
 	'Kralkatorrik.jpg': [60, 590]
 }
