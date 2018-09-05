@@ -1,16 +1,20 @@
 const _loc = {
-	'冰龍Jormag': [481, 28, 555, 116],
-	'毒龍Zhaitan(甦醒)': [268, 422, 355, 539],
-	'毒龍Zhaitan(決戰)': [337, 236, 357, 256],
+	'火焰巨龍Primordus': [74, 421, 126, 465],
+	'冰霜巨龍Jormag': [481, 28, 555, 116],
+	'不死巨龍Zhaitan(甦醒)': [268, 422, 355, 539],
+	'不死巨龍Zhaitan(決戰)': [337, 236, 357, 256],
 	'水晶龍Kralkatorrik': [722, 695, 831, 762],
+	'叢林巨龍Mordremoth': [481, 28, 555, 116],
 	'大災變The Cataclysm': [254, 408, 368, 513],
-	'Orr古國': [253, 404, 347, 570]
+	'Orr古國': [253, 404, 347, 570],
 }
 const _img = {
+	'Primordus.jpg': [272, 392],
 	'jormag.jpg': [400, 150],
 	'Icebrood.jpg': [400, 382],
 	'Zhaitan.jpg': [60, 590],
-	'Kralkatorrik.jpg': [60, 590]
+	'Kralkatorrik.jpg': [60, 590],
+	'Mouth_of_Zhaitan.jpg': [320, 590],
 }
 function loc(...args) {
 	return args.map(index => ({ name: index, pos: _loc[index] }))
@@ -19,35 +23,67 @@ function img(...args) {
 	return args.map(index => ({ src: index, pos: _img[index] }))
 }
 const data = [{
-	caption: '天災人禍',
+	caption: '上古巨龍',
 	text: [
-		// '* 火龍Primordus - 1代時被擊敗，第三季的時候似乎有偵測到其活動',
-		//
+		'在泰瑞亞學者的觀點中，上古巨龍被描述成自然與原始的勢力，就像一場不可抵擋的暴風雪或大地震。每一條巨龍都掌握著兩種能力元素，它們有著共同的目的，那就是吞噬所有生命與魔法，但每一條上古巨龍都有著自己獨特的動機和行事風格，從腐化的方式到汲取力量的形式都不盡相同。此外巨龍之間也抱有著敵意，它們的爪牙會相互廝殺，無差別的攻擊所見到的任何能夠活動的生物。', '',
+		'巨龍本身並不會直面泰瑞亞的其他生物，它們驅使著各自的爪牙，通過手下的首領們傳達並執行自己的意志。', '',
+		'從生物學上，上古巨龍十分獨特，它們並不會以常規方式吞噬食物，而是用魔法傳遞的形式，例如不死巨龍Zhaitan會通過澤坦之口Mouth of Zhaitan來進食。', '',
+		'在巨龍蟄伏的年代裡，它們吞噬的魔法會逐漸釋放回世界，使得它們沉睡的地方充盈著高濃度的魔法力量。這便是阿蘇拉在火焰巨龍Primordus身邊修建中央轉置實驗室的緣由（他們把巨龍當成了巨大的魔法雕像），同時也是六真神在不死巨龍Zhaitan上方修建亞拉的原因（六神當時並不知道巨龍的存在）。', '',
+		'當它們蘇醒時，會首先釋放出一種特有的巨龍能量，將觸及到的一切生物個體和環境腐化為自己所用（唯一的例外是蒼白之樹上誕生受到夢境守護的希爾瓦裡）。'
 	].join('<br/>'),
-	boxes: loc('冰龍Jormag', '毒龍Zhaitan(甦醒)', '大災變The Cataclysm', '水晶龍Kralkatorrik'),
+	boxes: loc('火焰巨龍Primordus', '冰霜巨龍Jormag', '不死巨龍Zhaitan(甦醒)', '大災變The Cataclysm', '水晶龍Kralkatorrik', '叢林巨龍Mordremoth'),
 	children: [{
-		caption: '冰龍Jormag',
+		caption: '火焰巨龍Primordus',
 		text: [
-			'冰龍Jormag - 出現在諾恩故事線，有洗腦能力，每個嘗試攻擊冰龍的人都會變成Icebrood這種冰怪。',
-			'諾恩有一群異教徒 Sons of Svanir 崇拜冰龍而不是傳統諾恩宗教裡面的野性靈魂',
-			'矮人用他的血液做出了一把傳奇劍 Sanguinary Blade ，也會出現在故事中'
+			'火焰巨龍Primordus - 泰瑞亞大陸上最先覺醒的上古巨龍。派莫德斯原本棲息於地下深處的洞穴，但它被阿蘇拉誤認為是散發神秘能量的雕像，阿蘇拉在巨龍身邊建造了中央傳送室。',
+			'派莫德斯原本應當在1078AE年覺醒，但因其最強大的僕從終極破壞者被一代的勇者們擊敗，它的覺醒向後推遲到兩年。隨著派莫德斯的覺醒，上古巨龍紛紛破繭而出。',
+			'派莫德斯覺醒後，它在泰瑞亞深處蟄伏的毀滅者僕從們蜂擁而出，粉碎了阿蘇拉回歸故土的希望。大約在派莫德斯完全蘇醒時，最後的矮人們執行了崇高矮人儀式(就是全部變成石頭人)並去往地下與派莫德斯和它的毀滅者們戰鬥。',
+			'現在GW2的世界裡面已經沒有矮人了', '',
+			'最新的第三季中，地底的火焰巨龍又開始活動'
 		].join('<br/>'),
-		boxes: loc('冰龍Jormag'),
+		boxes: loc('火焰巨龍Primordus'),
+		imgs: img('Primordus.jpg')
+	}, {
+		caption: '冰霜巨龍Jormag',
+		text: [
+			'冰霜巨龍Jormag - 出現在諾恩故事線，有洗腦能力，每個嘗試攻擊冰霜巨龍的人都會變成冰巢怪Icebrood。',
+			'諾恩有一群異教徒 Sons of Svanir 崇拜冰霜巨龍而不是傳統諾恩宗教裡面的野性靈魂',
+			'極北的海域受到冰霜巨龍的破壞改變了原有的樣貌,諾恩族被迫從古老的棲息地遷往曾經被矮人佔據的席瓦山脈Shiverpeak Mountains',
+			'建立起新的家園,儘管堅忍不拔的諾恩族願意挺身對抗這頭上古巨龍,但對未來卻仍舊感到迷惘。',
+		].join('<br/>'),
+		boxes: loc('冰霜巨龍Jormag'),
 		imgs: img('jormag.jpg', 'Icebrood.jpg')
 	}, {
-		caption: '毒龍Zhaitan',
+		caption: '不死巨龍Zhaitan',
 		text: [
-			'毒龍Zhaitan - 個人故事的主線就是要阻止這隻龍。',
+			'不死巨龍Zhaitan - 個人故事的主線就是要阻止這隻龍。',
 			'他甦醒的時候將被大災變毀滅的Orr古國從海底，產生的大海嘯淹沒了數千人，甚至淹沒了Lions Arch',
-			'他在遊戲中不斷飛來飛去變換位置與他的爪牙們佔據了很大一塊領地'
+			'強大的力量在暗中腐蝕著沉沒在海底、曾經輝煌的土地。隨著不死巨龍的甦醒,歐爾大陸隨著大量的亡靈也從海底重新浮現。',
+			'歐爾的亡靈帶著腐化和疫病在整座歐爾大陸上蔓延開來。',
+			'那些曾經是歐爾王國最強大的海巡艦隊,現今變成了行屍走肉的不死族在海上巡邏,阻隔了和泰瑞亞Tyria大陸的聯繫',
+			'Zhaitan不用嘴巴吃飯，而是透過他的手下Mouth of Zhaitan吞噬魔法物品'
 		].join('<br/>'),
-		boxes: loc('毒龍Zhaitan(甦醒)', '毒龍Zhaitan(決戰)'),
-		imgs: img('Zhaitan.jpg')
+		boxes: loc('不死巨龍Zhaitan(甦醒)', '不死巨龍Zhaitan(決戰)'),
+		imgs: img('Zhaitan.jpg', 'Mouth_of_Zhaitan.jpg')
 	}, {
 		caption: '水晶龍Kralkatorrik',
 		text: [
-			'水晶龍Kralkatorrik - 體型巨大，經過的地方其生物根地貌都會水晶化。飛過之處對大地造成了傷痕，後人稱之為Dragonbrand龍痕。',
-			'傳奇冒險隊 - 命運之刃Destiny\'s Edge 曾經與之戰鬥並造成了Asura英雄Snaff犧牲'
+			'水晶龍Kralkatorrik - 在夏爾Charr的故土,一座曾經被誤認為大山的遠古巨龍甦醒了,',
+			'飛越了烈脊乾原Blazeridge	Steppes ,在身後留下了一片滿目瘡痍的荒地-龍之烙印Dragonbrand。',
+			'水晶型態的物種和被腐化的生物占據了整個地區。在一個由多種族聯合組成的軍事組織-守夜者Vigil幫助下,',
+			'Charr在重新控制這片區域。',
+			'傳奇冒險隊伍 - 命運之刃Destiny\'s Edge 曾經與之戰鬥並造成了Asura英雄Snaff犧牲'
+		].join('<br/>'),
+		boxes: loc('水晶龍Kralkatorrik'),
+		imgs: img('Kralkatorrik.jpg')
+	}, {
+		caption: '叢林巨龍Mordremoth',
+		text: [
+			'水晶龍Kralkatorrik - 在夏爾Charr的故土,一座曾經被誤認為大山的遠古巨龍甦醒了,',
+			'飛越了烈脊乾原Blazeridge	Steppes ,在身後留下了一片滿目瘡痍的荒地-龍之烙印Dragonbrand。',
+			'水晶型態的物種和被腐化的生物占據了整個地區。在一個由多種族聯合組成的軍事組織-守夜者Vigil幫助下,',
+			'Charr在重新控制這片區域。',
+			'傳奇冒險隊伍 - 命運之刃Destiny\'s Edge 曾經與之戰鬥並造成了Asura英雄Snaff犧牲'
 		].join('<br/>'),
 		boxes: loc('水晶龍Kralkatorrik'),
 		imgs: img('Kralkatorrik.jpg')

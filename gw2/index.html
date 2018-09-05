@@ -72,6 +72,8 @@
 			},
 			methods: {
 				boxStyle(box, i) {
+					if (!box.pos)
+						console.error(`${box.name} not found!`)
 					return {
 						left: box.pos[0],
 						top: box.pos[1],
