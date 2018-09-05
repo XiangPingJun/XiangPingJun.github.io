@@ -3,6 +3,8 @@
 <head>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 	<script src="data.js"></script>
+	<script src="DestinysEdge.js"></script>
+	<script src="ElderDragons.js"></script>
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
 	<style>
 		.form-checkbox,
@@ -42,13 +44,13 @@
 				<input type="radio" :name="'lv-1-radio-' + i" v-model="lv1Model" :value="i" />
 				<i class="form-icon"></i>{{option.caption}}
 			</label>
-			<div style="margin:10px"></div>
+			<hr>
 
 			<label v-if="data[lv1Model]" v-for="(option, i) in data[lv1Model].children" class="form-radio">
 				<input type="radio" :name="'lv-2-radio-' + i" v-model="lv2Model" :value="i" />
 				<i class="form-icon"></i>{{option.caption}}
 			</label>
-			<div style="margin:10px"></div>
+			<hr>
 
 			<div v-for="(box, i) in selected.boxes" :style="boxStyle(box, i)" class="box"></div>
 			<b v-for="(box, i) in selected.boxes" :style="boxNameStyle(box, i)" class="box-caption">{{box.name}}</b>
@@ -64,7 +66,10 @@
 		}
 		new Vue({
 			el: '#app',
-			data: { data, imgSrc: '', text: '', lv1Model: 0, lv2Model: null },
+			data: { 
+				data: [DestinysEdge, ElderDragons], 
+				imgSrc: '', text: '', lv1Model: 0, lv2Model: null 
+			},
 			computed: {
 				selected() {
 					return (this.data[this.lv1Model]) && this.data[this.lv1Model].children[this.lv2Model] || this.data[this.lv1Model] || {}
