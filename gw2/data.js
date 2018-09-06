@@ -18,6 +18,7 @@ const _img = {
 	'Fang_of_the_Serpent.jpg': [320, 590],
 	'Destinys_Edge.jpg': [100, 100],
 	'Caithe.jpg': [100, 100],
+	'Faolain.jpg': [500, 100],
 }
 function loc(...args) {
 	return args.map(index => ({ name: index, pos: _loc[index] }))
