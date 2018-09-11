@@ -15,10 +15,16 @@ const _img = {
 	'Zhaitan.jpg': [60, 590],
 	'Kralkatorrik.jpg': [60, 590],
 	'Mouth_of_Zhaitan.jpg': [320, 590],
-	'Fang_of_the_Serpent.jpg': [320, 590],
+	'Fang_of_the_Serpent.jpg': [150, 150],
 	'Destinys_Edge.jpg': [100, 100],
 	'Caithe.jpg': [100, 100],
 	'Faolain.jpg': [500, 100],
+	'Eir.jpg': [50, 50],
+	'Garm.jpg': [550, 50],
+	'Captain_Logan_Thackeray.jpg': [50, 50],
+	'Zojja.jpg': [50, 50],
+	'Rytlock.jpg': [50, 50],
+	'Snaff.jpg': [50, 50],
 }
 function loc(...args) {
 	return args.map(index => ({ name: index, pos: _loc[index] }))

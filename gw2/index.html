@@ -66,9 +66,9 @@
 		}
 		new Vue({
 			el: '#app',
-			data: { 
-				data: [DestinysEdge, ElderDragons], 
-				imgSrc: '', text: '', lv1Model: 0, lv2Model: null 
+			data: {
+				data: [DestinysEdge, ElderDragons],
+				imgSrc: '', text: '', lv1Model: 0, lv2Model: null
 			},
 			computed: {
 				selected() {
@@ -96,7 +96,10 @@
 				}
 			},
 			watch: {
-				lv1Model() { shuffleColors() }
+				lv1Model() {
+					shuffleColors()
+					this.lv2Model = null
+				}
 			}
 		})
 		window.onmousemove = function (event) {
