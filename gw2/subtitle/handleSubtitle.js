@@ -34,10 +34,11 @@ function handleTimeLine(match, line) {
 }
 
 function haneleTextLine(match, line) {
-  if (firstSec)
-    section[2] = line
-  else {
-    section[2] += ' ' + line || ''
+  if (firstSec) {
+    section[2] = line || ''
+  } else {
+    section[2] = section[2] || ''
+    section[2] += '。' + (line || '')
     section[3] = ''
     section[4] = ''
     logger.write(section.join('\n'))
