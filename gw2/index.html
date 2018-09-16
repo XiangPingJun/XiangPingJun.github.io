@@ -3,6 +3,7 @@
 <head>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 	<script src="data.js"></script>
+	<script src="HumanKingdom.js"></script>
 	<script src="DestinysEdge.js"></script>
 	<script src="ElderDragons.js"></script>
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
@@ -37,7 +38,7 @@
 	<div id="mouse-pos">(0, 0)</div>
 	<div id="app" style="display:flex">
 		<img src="Tyria_map.jpg" style="height:800px; margin-right:15px;" />
-		<br/>
+		<br />
 		<div class="form-group">
 			Tyria大陸:
 			<label v-for="(option, i) in data" class="form-radio">
@@ -60,14 +61,14 @@
 	</div>
 
 	<script>
-		let colors = ['#B71C1C', '#880E4F', '#6200EA', '#4A148C', '#311B92', '#0D47A1', '#01579B', '#006064', '#004D40', '#33691E', '#827717', '#E65100', '#4E342E', '#37474F']
+		let colors = ['#B71C1C', '#880E4F', '#6200EA', '#4A148C', '#01579B', '#006064', '#004D40', '#33691E', '#827717', '#E65100', '#4E342E', '#37474F']
 		function shuffleColors() {
 			colors.sort(() => 0.5 - Math.random())
 		}
 		new Vue({
 			el: '#app',
 			data: {
-				data: [DestinysEdge, ElderDragons],
+				data: [HumanKingdom, DestinysEdge, ElderDragons],
 				imgSrc: '', text: '', lv1Model: 0, lv2Model: null
 			},
 			computed: {
@@ -88,10 +89,26 @@
 					}
 				},
 				boxNameStyle(box, i) {
-					return {
-						left: box.pos[0],
-						top: box.pos[1] + box.pos[3] - box.pos[1] + 5,
-						color: colors[i],
+					switch (box.pos[4]) {
+						case 'right':
+							return {
+								left: box.pos[2] + 5,
+								top: (box.pos[1] + box.pos[3]) / 2 - 11,
+								color: colors[i],
+							}
+						case 'top':
+							return {
+								left: box.pos[0],
+								top: box.pos[1] - 27,
+								color: colors[i],
+							}
+						case 'bottom':
+						default:
+							return {
+								left: box.pos[0],
+								top: box.pos[3] + 5,
+								color: colors[i],
+							}
 					}
 				}
 			},
