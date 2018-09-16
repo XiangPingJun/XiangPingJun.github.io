@@ -12,6 +12,7 @@ const _loc = {
 	'灼世The Searing': [555, 106, 672, 229, 'top'],
 	'仇火Foefire': [630, 175, 669, 200, 'right'],
 	'科瑞塔王國Kryta': [233, 81, 410, 327],
+	'黑色堡壘Black Citadel': [556, 173, 586, 220, 'top'],
 }
 const _img = {
 	'Primordus.jpg': [272, 392],
@@ -30,6 +31,8 @@ const _img = {
 	'Zojja.jpg': [50, 50],
 	'Rytlock.jpg': [50, 50],
 	'Snaff.jpg': [50, 50],
+	'Ascalon_City_Ruins.jpg': [50, 50],
+	'Ghost.jpg': [50, 350],
 }
 function loc(...args) {
 	return args.map(index => ({ name: index, pos: _loc[index] }))
