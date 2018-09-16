@@ -41,7 +41,7 @@ const ElderDragons = {
 			'那些曾經是歐爾王國最強大的海巡艦隊,現今變成了行屍走肉的不死族在海上巡邏,阻隔了和泰瑞亞Tyria大陸的聯繫',
 			'Zhaitan不用嘴巴吃飯，而是透過他的手下Mouth of Zhaitan吞噬魔法物品'
 		].join('<br/>'),
-		boxes: loc('不死巨龍Zhaitan(甦醒)', '不死巨龍Zhaitan(決戰)'),
+		boxes: loc('不死巨龍Zhaitan(甦醒)', '不死巨龍Zhaitan(決戰)', '歐爾王國Orr'),
 		imgs: img('Zhaitan.jpg', 'Mouth_of_Zhaitan.jpg')
 	}, {
 		caption: '水晶龍Kralkatorrik',
