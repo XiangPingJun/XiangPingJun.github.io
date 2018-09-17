@@ -33,6 +33,7 @@ const _img = {
 	'Snaff.jpg': [50, 50],
 	'Ascalon_City_Ruins.jpg': [50, 50],
 	'Ghost.jpg': [50, 350],
+	'Quaggan.png': [5, 5],
 }
 function loc(...args) {
 	return args.map(index => ({ name: index, pos: _loc[index] }))
