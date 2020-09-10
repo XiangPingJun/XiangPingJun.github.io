@@ -6,21 +6,40 @@
 		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
 		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+		<style>
+			iframe {
+				border: none;
+				width: 100%;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="app" v-cloak class="p-2">
-			<input type="text" class="form-input" placeholder="搜尋詞語">
+			<input placeholder="搜尋詞語" v-model="searchText" type="text" class="form-input">
+			<iframe v-if="searchText" :src="searchUrl"></iframe>
 		</div>
 
 		<script>
 			const app = new Vue({
 				el: '#app',
-				data: {
+				data() {
+					return {
+						searchText: '',
+						queryStr: ''
+					}
 				},
+				watch: {
+					searchText: _.debounce(function() {
+						this.queryStr = this.searchText
+					}, 1000)
+				},
+				computed: {
+					searchUrl() {
+						return `https://www.google.com/search?q=${encodeURIComponent(this.queryStr)}%20形容`
+					}
+				}
 			})
 		</script>
 	</body>
 </html>
-
-
-
