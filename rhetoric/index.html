@@ -6,6 +6,11 @@
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
 	<script src="rhetoric.js"></script>
 	<script src="https://unpkg.com/vue@2.6.12"></script>
+	<style>
+		.btn {
+			font-size: 1rem;
+		}
+	</style>
 </head>
 
 <body class="p-1">
@@ -13,8 +18,8 @@
 		<div class="columns">
 			<div class="column col-xs-12">
 				<div v-for="(c1, c1Str) in rhetoric">
-					<button class="btn" disabled>{{c1Str}}</button>
-					<button v-for="(c2, c2Str) in c1" class="btn m-1">{{c2Str}}</button>
+					<button class="btn btn-success mb-1" disabled>{{c1Str}}</button>
+					<button v-for="(c2, c2Str) in c1" class="btn mr-1 mb-1">{{c2Str}}</button>
 				</div>
 			</div>
 		</div>
