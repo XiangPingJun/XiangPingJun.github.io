@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-		<script src="rhetoric.js"></script>
-		<script src="https://unpkg.com/vue@2.6.12"></script>
-	</head>
-	<body class="p-1" style="max-width: 750px;">
-		<div id="app">
-			<div v-for="(c1, c1Str) in rhetoric">
-				<button class="btn" disabled>{{c1Str}}</button>
-				<button v-for="(c2, c2Str) in c1" class="btn m-1">{{c2Str}}</button>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+	<script src="rhetoric.js"></script>
+	<script src="https://unpkg.com/vue@2.6.12"></script>
+</head>
+
+<body class="p-1">
+	<div id="app" class="container">
+		<div class="columns">
+			<div class="column col-xs-12">
+				<div v-for="(c1, c1Str) in rhetoric">
+					<button class="btn" disabled>{{c1Str}}</button>
+					<button v-for="(c2, c2Str) in c1" class="btn m-1">{{c2Str}}</button>
+				</div>
 			</div>
 		</div>
+	</div>
 
-		<script>
-      new Vue({
-				el: '#app',
-				data() {
-					return {
-						selected: undefined,
-						rhetoric,
-					}
+	<script>
+		new Vue({
+			el: '#app',
+			data() {
+				return {
+					selected: undefined,
+					rhetoric,
 				}
-      })
-    </script>
-	</body>
+			}
+		})
+	</script>
+</body>
+
 </html>
