@@ -3,43 +3,27 @@
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
-		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
-		<style>
-			iframe {
-				border: none;
-				width: 100%;
-			}
-		</style>
+		<script src="rhetoric.js"></script>
+		<script src="https://unpkg.com/vue@2.6.12"></script>
 	</head>
-	<body>
-		<div id="app" v-cloak class="p-2">
-			<input placeholder="搜尋詞語" v-model="searchText" type="text" class="form-input">
-			<iframe v-if="searchText" :src="searchUrl"></iframe>
+	<body class="p-1" style="max-width: 750px;">
+		<div id="app">
+			<div v-for="(c1, c1Str) in rhetoric">
+				<button class="btn" disabled>{{c1Str}}</button>
+				<button v-for="(c2, c2Str) in c1" class="btn m-1">{{c2Str}}</button>
+			</div>
 		</div>
 
 		<script>
-			const app = new Vue({
+      new Vue({
 				el: '#app',
 				data() {
 					return {
-						searchText: '',
-						queryStr: ''
-					}
-				},
-				watch: {
-					searchText: _.debounce(function() {
-						this.queryStr = this.searchText
-					}, 1000)
-				},
-				computed: {
-					searchUrl() {
-						return `https://www.google.com/search?q=${encodeURIComponent(this.queryStr)}%20形容`
+						selected: undefined,
+						rhetoric,
 					}
 				}
-			})
-		</script>
+      })
+    </script>
 	</body>
 </html>
