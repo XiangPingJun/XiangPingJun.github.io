@@ -24,13 +24,14 @@
 		<div class="columns">
 			<div v-if="selected" class="column col-xs-12">
 				<div v-for="(c3, c3Str) in selected">
-					<button class="btn btn-sm btn-error mb-1" disabled>{{c3Str}}</button>
-					<button v-for="c4Str in selected[c3Str]" class="btn btn-sm mr-1 mb-1">{{c4Str}}</button>
+					<button class="btn btn-sm btn-success mb-1" disabled>{{c3Str}}</button>
+					<button v-for="c4Str in shuffle(selected[c3Str])" class="btn btn-sm mr-1 mb-1"
+						@click="selected = undefined">{{c4Str}}</button>
 				</div>
 			</div>
 			<div v-else class="column col-xs-12">
 				<div v-for="(c1, c1Str) in rhetoric">
-					<button class="btn btn-sm btn-success mb-1" disabled>{{c1Str}}</button>
+					<button class="btn btn-sm btn-error mb-1" disabled>{{c1Str}}</button>
 					<button v-for="(c2, c2Str) in c1" class="btn btn-sm mr-1 mb-1"
 						@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
 				</div>
@@ -45,6 +46,15 @@
 				return {
 					rhetoric,
 					selected: undefined,
+				}
+			},
+			methods: {
+				shuffle(a) {
+					for (let i = a.length - 1; i > 0; i--) {
+						const j = Math.floor(Math.random() * (i + 1));
+						[a[i], a[j]] = [a[j], a[i]];
+					}
+					return a;
 				}
 			}
 		})
