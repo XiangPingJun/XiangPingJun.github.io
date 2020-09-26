@@ -16,23 +16,27 @@
 				zoom: 4;
 			}
 		}
+
+		.btn:focus {
+			box-shadow: none;
+		}
 	</style>
 </head>
 
-<body class="p-1">
+<body class="pt-1">
 	<div id="app" class="container">
 		<div class="columns">
 			<div v-if="selected" class="column col-xs-12">
 				<div v-for="(c3, c3Str) in selected">
-					<button class="btn btn-sm btn-success mb-1" disabled>{{c3Str}}</button>
-					<button v-for="c4Str in shuffle(selected[c3Str])" class="btn btn-sm mr-1 mb-1"
+					<button class="btn btn-sm btn-success" disabled>{{c3Str}}</button>
+					<button v-for="c4Str in shuffle(selected[c3Str])" class="btn btn-sm btn-link"
 						@click="selected = undefined">{{c4Str}}</button>
 				</div>
 			</div>
 			<div v-else class="column col-xs-12">
 				<div v-for="(c1, c1Str) in rhetoric">
-					<button class="btn btn-sm btn-error mb-1" disabled>{{c1Str}}</button>
-					<button v-for="(c2, c2Str) in c1" class="btn btn-sm mr-1 mb-1"
+					<button class="btn btn-sm btn-error" disabled>{{c1Str}}</button>
+					<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
 						@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
 				</div>
 			</div>
