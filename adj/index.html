@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-	<link rel="stylesheet" type="text/css" href="./icofont.min.css">
+	<link rel="stylesheet" type="text/css" href="./icofont.css">
 	<script src="adj.js"></script>
 	<script src="https://unpkg.com/vue@2.6.12"></script>
 	<style>
@@ -32,15 +32,16 @@
 
 <body>
 	<div id="app" style="display: flex;" class="p-1">
-		<i class="icofont-boy"></i>
+		<i class=""></i>
 		<div v-if="selected">
 			<button v-for="str in shuffle(selected.split(' '))" class="btn btn-sm btn-link"
 				@click="selected = undefined">{{str}}</button>
 		</div>
 		<div v-else>
 			<div v-for="(c1, c1Str) in adj" style="border-bottom: 1px dashed gray;">
-				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
-					@click="selected = adj[c1Str][c2Str]">{{c2Str}}</button>
+				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link" @click="selected = adj[c1Str][c2Str]">
+					<i :class="`icofont-${c2Str.split(' ')[1]}`"></i>{{c2Str.split(' ')[0]}}
+				</button>
 			</div>
 		</div>
 	</div>
