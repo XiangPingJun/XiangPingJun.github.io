@@ -4,12 +4,14 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+		integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 	<script src="rhetoric.js"></script>
 	<script src="https://unpkg.com/vue@2.6.12"></script>
 	<style>
 		body {
 			zoom: 1.5;
-			max-width: 50vw;
+			max-width: 50%;
 		}
 
 		@media (max-width: 1200px) {
@@ -31,6 +33,7 @@
 
 <body>
 	<div id="app" style="display: flex;" class="p-1">
+		<i class="fab fa-accessible-icon"></i>
 		<div v-if="selected">
 			<button v-for="str in shuffle(selected.split(' '))" class="btn btn-sm btn-link"
 				@click="selected = undefined">{{str}}</button>
