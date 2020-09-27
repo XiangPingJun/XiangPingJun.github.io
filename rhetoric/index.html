@@ -37,7 +37,6 @@
 		</div>
 		<div v-else>
 			<div v-for="(c1, c1Str) in rhetoric">
-				<button class="btn btn-sm btn-link" disabled>{{c1Str}}</button>
 				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
 					@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
 			</div>
