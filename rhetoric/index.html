@@ -30,13 +30,13 @@
 </head>
 
 <body>
-	<div id="app" class="container">
+	<div id="app" style="display: flex;" class="p-1">
 		<div v-if="selected">
 			<button v-for="str in shuffle(selected.split(' '))" class="btn btn-sm btn-link"
 				@click="selected = undefined">{{str}}</button>
 		</div>
 		<div v-else>
-			<div v-for="(c1, c1Str) in rhetoric">
+			<div v-for="(c1, c1Str) in rhetoric" style="border-bottom: 1px dashed gray;">
 				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
 					@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
 			</div>
