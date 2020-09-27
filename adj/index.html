@@ -4,9 +4,8 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-		integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-	<script src="rhetoric.js"></script>
+	<link rel="stylesheet" type="text/css" href="./icofont.min.css">
+	<script src="adj.js"></script>
 	<script src="https://unpkg.com/vue@2.6.12"></script>
 	<style>
 		body {
@@ -33,15 +32,15 @@
 
 <body>
 	<div id="app" style="display: flex;" class="p-1">
-		<i class="fab fa-accessible-icon"></i>
+		<i class="icofont-boy"></i>
 		<div v-if="selected">
 			<button v-for="str in shuffle(selected.split(' '))" class="btn btn-sm btn-link"
 				@click="selected = undefined">{{str}}</button>
 		</div>
 		<div v-else>
-			<div v-for="(c1, c1Str) in rhetoric" style="border-bottom: 1px dashed gray;">
+			<div v-for="(c1, c1Str) in adj" style="border-bottom: 1px dashed gray;">
 				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
-					@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
+					@click="selected = adj[c1Str][c2Str]">{{c2Str}}</button>
 			</div>
 		</div>
 	</div>
@@ -51,7 +50,7 @@
 			el: '#app',
 			data() {
 				return {
-					rhetoric,
+					adj,
 					selected: undefined,
 				}
 			},
