@@ -9,11 +9,13 @@
 	<style>
 		body {
 			zoom: 1.5;
+			max-width: 50vw;
 		}
 
 		@media (max-width: 1200px) {
 			body {
 				zoom: 4;
+				max-width: none;
 			}
 		}
 
@@ -26,11 +28,8 @@
 <body>
 	<div id="app" class="container">
 		<div v-if="selected">
-			<div v-for="(c3, c3Str) in selected" class="mt-1">
-				<button class="btn btn-sm btn-success" disabled>{{c3Str}}</button>
-				<button v-for="c4Str in shuffle(selected[c3Str].split(' '))" class="btn btn-sm btn-link"
-					@click="selected = undefined">{{c4Str}}</button>
-			</div>
+			<button v-for="str in shuffle(selected.split(' '))" class="btn btn-sm btn-link"
+				@click="selected = undefined">{{str}}</button>
 		</div>
 		<div v-else>
 			<div v-for="(c1, c1Str) in rhetoric" class="mt-1">
