@@ -23,22 +23,20 @@
 	</style>
 </head>
 
-<body class="pt-1">
+<body>
 	<div id="app" class="container">
-		<div class="columns">
-			<div v-if="selected" class="column col-xs-12">
-				<div v-for="(c3, c3Str) in selected" class="mb-1">
-					<button class="btn btn-sm btn-success" disabled>{{c3Str}}</button>
-					<button v-for="c4Str in shuffle(selected[c3Str])" class="btn btn-sm btn-link"
-						@click="selected = undefined">{{c4Str}}</button>
-				</div>
+		<div v-if="selected">
+			<div v-for="(c3, c3Str) in selected" class="mt-1">
+				<button class="btn btn-sm btn-success" disabled>{{c3Str}}</button>
+				<button v-for="c4Str in shuffle(selected[c3Str].split(' '))" class="btn btn-sm btn-link"
+					@click="selected = undefined">{{c4Str}}</button>
 			</div>
-			<div v-else class="column col-xs-12">
-				<div v-for="(c1, c1Str) in rhetoric">
-					<button class="btn btn-sm" disabled>{{c1Str}}</button>
-					<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
-						@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
-				</div>
+		</div>
+		<div v-else>
+			<div v-for="(c1, c1Str) in rhetoric" class="mt-1">
+				<button class="btn btn-sm btn-link" disabled>{{c1Str}}</button>
+				<button v-for="(c2, c2Str) in c1" class="btn btn-sm btn-link"
+					@click="selected = rhetoric[c1Str][c2Str]">{{c2Str}}</button>
 			</div>
 		</div>
 	</div>
