@@ -52,14 +52,14 @@
 				</div>
 			</div>
 		</form>
-		<h5 v-if="marginCall === null" class="text-warning">
-			*請填妥欄位
-		</h5>
-		<h5 v-else-if="marginCall >= 0" class="text-success">
+		<h5 v-if="marginCall > 0 || marginCall === 0" class="text-success">
 			*安全水位 {{marginCall}}
 		</h5>
 		<h5 v-else-if="marginCall < 0" class="text-error">
 			*追加保證金 {{marginCall}}
+		</h5>
+		<h5 v-else class="text-warning">
+			*請填妥欄位
 		</h5>
 	</div>
 
@@ -77,10 +77,10 @@
 			},
 			computed: {
 				marginCall() {
-					if (this.cash === '' || this.volumn === '' || this.buyCash === '' || this.currPrive === '' || this.lowPrive === '') {
+					if (this.cash === '' || this.volumn === '' || this.lowPrive === '') {
 						return null
 					}
-					return Math.ceil(this.cash - this.buyCash + this.lowPrive * (this.volumn + this.buyCash / this.currPrive) * 0.75)
+					return Math.ceil(this.cash - this.buyCash + this.lowPrive * (this.volumn + (this.buyCash / this.currPrive || 0)) * 0.75)
 				},
 			},
 		})
