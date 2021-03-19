@@ -35,7 +35,7 @@
 					<label class="form-label">現有股數</label>
 				</div>
 				<div class="col-3 col-12">
-					<input v-model.number="volumn" type="number" class="form-input">
+					<input v-model.number="volume" type="number" class="form-input">
 				</div>
 			</div>
 			<div class="form-group">
@@ -62,12 +62,12 @@
 					<label class="form-label">最新股價</label>
 				</div>
 				<div class="col-3 col-12">
-					<input v-model.number="currPrice" type="number" class="form-input">
+					<input v-model.number="buyPrice" type="number" class="form-input">
 				</div>
 				<div class="col-1 col-12">
 					<span class="mx-1" />
-					<button class="btn" @click="currPrice = (currPrice || 0) + 1" tabindex="-1">＋</button>
-					<button class="btn" @click="currPrice = (currPrice || 0) - 1" tabindex="-1">－</button>
+					<button class="btn" @click="buyPrice = (buyPrice || 0) + 1" tabindex="-1">＋</button>
+					<button class="btn" @click="buyPrice = (buyPrice || 0) - 1" tabindex="-1">－</button>
 				</div>
 			</div>
 			<div class="form-group">
@@ -101,18 +101,22 @@
 			data() {
 				return {
 					cash: '',
-					volumn: '',
+					volume: '',
 					buyCash: '',
-					currPrice: '',
+					buyPrice: '',
 					lowPrice: '',
 				}
 			},
 			computed: {
 				marginCall() {
-					if (this.cash === '' || this.volumn === '' || this.lowPrice === '') {
+					if (this.cash === '' || this.volume === '' || this.lowPrice === '') {
 						return null
 					}
-					return Math.ceil(this.cash - this.buyCash + this.lowPrice * (this.volumn + (this.buyCash / this.currPrice || 0)) * 0.75)
+					if(this.buyCash && this.buyPrice) {
+						const newVolume = this.volume + Math.floor(this.buyCash / this.buyPrice)
+						return Math.floor(this.cash - (this.buyCash || 0) + this.lowPrice * newVolume * 0.75)
+					}
+					return Math.floor(this.cash + this.lowPrice * this.volume * 0.75)
 				},
 			},
 		})
