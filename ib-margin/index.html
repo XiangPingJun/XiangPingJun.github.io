@@ -12,56 +12,83 @@
 	<div id="app" class="p-2">
 		<div class="form-horizontal">
 			<div class="form-group">
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<label class="form-label">現金</label>
 				</div>
-				<div class="col-4 col-sm-12">
-					<input v-model.number="cash" type="number" class="form-input">
+				<div class="col-3 col-12">
+					<input
+						v-model.number="cash"
+						@keydown.up.prevent="cash = (cash || 0) + 1000"
+						@keydown.down.prevent="cash = (cash || 0) - 1000"
+						type="number"
+						class="form-input"
+					>
+				</div>
+				<div class="col-1 col-12">
+					<span class="mx-1" />
+					<button class="btn" @click="cash = (cash || 0) + 1000" tabindex="-1">＋</button>
+					<button class="btn" @click="cash = (cash || 0) - 1000" tabindex="-1">－</button>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<label class="form-label">現有股數</label>
 				</div>
-				<div class="col-4 col-sm-12">
+				<div class="col-3 col-12">
 					<input v-model.number="volumn" type="number" class="form-input">
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<label class="form-label">再買金額</label>
 				</div>
-				<div class="col-4 col-sm-12">
-					<input v-model.number="buyCash" type="number" class="form-input">
+				<div class="col-3 col-12">
+					<input
+						v-model.number="buyCash"
+						@keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
+						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000"
+						type="number"
+						class="form-input"
+					>
+				</div>
+				<div class="col-1 col-12">
+					<span class="mx-1" />
+					<button class="btn" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
+					<button class="btn" @click="buyCash = (buyCash || 0) - 1000" tabindex="-1">－</button>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<label class="form-label">最新股價</label>
 				</div>
-				<div class="col-4 col-sm-12">
-					<input v-model.number="currPrive" type="number" class="form-input">
+				<div class="col-3 col-12">
+					<input v-model.number="currPrice" type="number" class="form-input">
+				</div>
+				<div class="col-1 col-12">
+					<span class="mx-1" />
+					<button class="btn" @click="currPrice = (currPrice || 0) + 1" tabindex="-1">＋</button>
+					<button class="btn" @click="currPrice = (currPrice || 0) - 1" tabindex="-1">－</button>
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<label class="form-label">保險最低價</label>
 				</div>
-				<div class="col-4 col-sm-12">
+				<div class="col-3 col-12">
 					<input v-model.number="lowPrice" type="number" class="form-input">
 				</div>
-				<div class="col-1 col-sm-12">
+				<div class="col-1 col-12">
 					<span class="mx-1" />
-					<button class="btn" @click="lowPrice = (lowPrice || 0) + 1">＋</button>
-					<button class="btn" @click="lowPrice = (lowPrice || 0) - 1">－</button>
+					<button class="btn" @click="lowPrice = (lowPrice || 0) + 1" tabindex="-1">＋</button>
+					<button class="btn" @click="lowPrice = (lowPrice || 0) - 1" tabindex="-1">－</button>
 				</div>
 			</div>
 		</div>
 		<h5 v-if="marginCall > 0 || marginCall === 0" class="text-success">
-			*安全水位 {{marginCall}}
+			*安全水位 ${{marginCall}}
 		</h5>
 		<h5 v-else-if="marginCall < 0" class="text-error">
-			*追加保證金 {{marginCall}}
+			*追加保證金 ${{marginCall}}
 		</h5>
 		<h5 v-else class="text-warning">
 			*請填妥欄位
@@ -76,7 +103,7 @@
 					cash: '',
 					volumn: '',
 					buyCash: '',
-					currPrive: '',
+					currPrice: '',
 					lowPrice: '',
 				}
 			},
@@ -85,7 +112,7 @@
 					if (this.cash === '' || this.volumn === '' || this.lowPrice === '') {
 						return null
 					}
-					return Math.ceil(this.cash - this.buyCash + this.lowPrice * (this.volumn + (this.buyCash / this.currPrive || 0)) * 0.75)
+					return Math.ceil(this.cash - this.buyCash + this.lowPrice * (this.volumn + (this.buyCash / this.currPrice || 0)) * 0.75)
 				},
 			},
 		})
