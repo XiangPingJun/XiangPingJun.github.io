@@ -127,12 +127,7 @@
 			new Vue({
 				el: '#app',
 				data() {
-					return {
-						...snap.val(),
-						buyCash: 0,
-						buyPrice: 0,
-						riskPrice: 0,
-					}
+					return snap.val()
 				},
 				mounted() {
 					document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
