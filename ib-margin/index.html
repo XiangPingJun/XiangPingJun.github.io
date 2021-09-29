@@ -35,55 +35,55 @@
 
 			<div class="columns mt-1">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號A:</pre>
+					<pre class="form-label m-0 mr-1">代號:</pre>
 					<input v-model.number="symbolA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">現有股數A:</pre>
+					<pre class="form-label m-0 mr-1">現有數:</pre>
 					<input v-model.number="volumeA" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險價A:</pre>
+					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="lowPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產A:{{Math.floor(eval(lowPriceA) * volumeA) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceA) * volumeA) || '--'}}</pre>
 				</div>
 			</div>
 
 			<div class="columns mt-1">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號B:</pre>
+					<pre class="form-label m-0 mr-1">代號:</pre>
 					<input v-model.number="symbolB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">現有股數B:</pre>
+					<pre class="form-label m-0 mr-1">現有數:</pre>
 					<input v-model.number="volumeB" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險價B:</pre>
+					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="lowPriceB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產B:{{Math.floor(eval(lowPriceB) * volumeB) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceB) * volumeB) || '--'}}</pre>
 				</div>
 			</div>
 
 			<div class="columns mt-1">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號C:</pre>
+					<pre class="form-label m-0 mr-1">代號:</pre>
 					<input v-model.number="symbolC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">現有股數C:</pre>
+					<pre class="form-label m-0 mr-1">現有數:</pre>
 					<input v-model.number="volumeC" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險價C:</pre>
+					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="lowPriceC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產B:{{Math.floor(eval(lowPriceC) * volumeC) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceC) * volumeC) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -101,14 +101,14 @@
 
 			<div class="columns mt-1">
 				<div class="column col-3 d-flex">
-					<pre class="form-label m-0 mr-1">最新股價:</pre>
+					<pre class="form-label m-0 mr-1">最新價:</pre>
 					<input v-model.number="buyPrice" type="number" class="form-input">
 				</div>
 			</div>
 
 			<div class="columns mt-1">
 				<div class="column col-3 d-flex">
-					<pre class="form-label m-0 mr-1">保險低價:</pre>
+					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model.number="lowPrice" type="number" class="form-input">
 				</div>
 			</div>
