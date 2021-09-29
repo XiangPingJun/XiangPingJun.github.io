@@ -28,7 +28,7 @@
 		<div class="container mb-2">
 			<div class="columns">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">現金: </pre>
+					<pre class="form-label m-0 mr-1">現金:</pre>
 					<input v-model.number="cash" type="number" class="form-input">
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 					<input v-model="lowPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceA) * volumeA) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceA) * volumeA) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -65,7 +65,7 @@
 					<input v-model="lowPriceB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceB) * volumeB) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceB) * volumeB) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -83,13 +83,13 @@
 					<input v-model="lowPriceC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">淨值:{{Math.floor(eval(lowPriceC) * volumeC) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceC) * volumeC) || '--'}}</pre>
 				</div>
 			</div>
 
 			<div class="columns mt-2">
 				<div class="column col-3 d-flex">
-					<pre class="form-label m-0 mr-1">再買金額:</pre>
+					<pre class="form-label m-0 mr-1">再買額:</pre>
 					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
 						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input">
 				</div>
