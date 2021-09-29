@@ -110,6 +110,10 @@
 	</div>
 
 	<script>
+		console.log(chrome.storage)
+		chrome.storage.sync.get(['data'], function(data) {
+			console.log(data)
+		})
 		new Vue({
 			el: '#app',
 			data() {
@@ -150,8 +154,8 @@
 			},
 			watch: {
 				$data: {
-					handler: function (val) {
-						localStorage.data = JSON.stringify(val)
+					handler: function (data) {
+						chrome.storage.local.set({ data })
 					},
 					deep: true
 				}
