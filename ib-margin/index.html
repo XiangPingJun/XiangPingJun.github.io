@@ -43,7 +43,7 @@
 					<input v-model.number="volumeA" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險最低價A:</pre>
+					<pre class="form-label m-0 mr-1">保險價A:</pre>
 					<input v-model="lowPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -61,7 +61,7 @@
 					<input v-model.number="volumeB" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險最低價B:</pre>
+					<pre class="form-label m-0 mr-1">保險價B:</pre>
 					<input v-model="lowPriceB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -79,7 +79,7 @@
 					<input v-model.number="volumeC" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">保險最低價C:</pre>
+					<pre class="form-label m-0 mr-1">保險價C:</pre>
 					<input v-model="lowPriceC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -93,7 +93,7 @@
 					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
 						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input">
 				</div>
-				<div class="column col-1">
+				<div class="column col-1 d-flex">
 					<button class="btn" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
 					<button class="btn" @click="buyCash = (buyCash || 0) - 1000" tabindex="-1">－</button>
 				</div>
