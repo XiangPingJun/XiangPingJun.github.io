@@ -88,7 +88,7 @@
 			</div>
 
 			<div class="columns mt-2">
-				<div class="column col-3 d-flex">
+				<div class="column col-4 d-flex">
 					<pre class="form-label m-0 mr-1">再買額:</pre>
 					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
 						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input mr-1">
@@ -98,14 +98,14 @@
 			</div>
 
 			<div class="columns mt-1">
-				<div class="column col-3 d-flex">
+				<div class="column col-4 d-flex">
 					<pre class="form-label m-0 mr-1">最新價:</pre>
 					<input v-model.number="buyPrice" type="number" class="form-input">
 				</div>
 			</div>
 
 			<div class="columns mt-1">
-				<div class="column col-3 d-flex">
+				<div class="column col-4 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model.number="riskPrice" type="number" class="form-input">
 				</div>
@@ -133,6 +133,15 @@
 						buyPrice: 0,
 						riskPrice: 0,
 					}
+				},
+				mounted() {
+					document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
+						.then((snap) => {
+							const val = snap.val()
+							for(const attr in val) {
+								this[attr] = val[attr]
+							}
+						}))
 				},
 				computed: {
 					marginCall() {
