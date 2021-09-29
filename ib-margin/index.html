@@ -25,14 +25,14 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">現有股數A:</pre>
-					<input v-model.number="volumeA" class="form-input">
+					<input v-model.number="volumeA" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">保險最低價A:</pre>
-					<input v-model.number="lowPriceA" class="form-input">
+					<input v-model="lowPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產A: {{lowPriceA * volumeA || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">等值資產A:{{eval(lowPriceA) * volumeA || '--'}}</pre>
 				</div>
 			</div>
 
@@ -43,14 +43,14 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">現有股數B:</pre>
-					<input v-model.number="volumeB" class="form-input">
+					<input v-model.number="volumeB" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">保險最低價B:</pre>
-					<input v-model.number="lowPriceB" class="form-input">
+					<input v-model="lowPriceB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產B: {{lowPriceB * volumeB || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">等值資產B:{{eval(lowPriceB) * volumeB || '--'}}</pre>
 				</div>
 			</div>
 
@@ -61,14 +61,14 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">現有股數C:</pre>
-					<input v-model.number="volumeC" class="form-input">
+					<input v-model.number="volumeC" type="number" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">保險最低價C:</pre>
-					<input v-model.number="lowPriceC" class="form-input">
+					<input v-model="lowPriceC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">等值資產C: {{lowPriceC * volumeC || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">等值資產C:{{lowPriceC * volumeC || '--'}}</pre>
 				</div>
 			</div>
 
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 		<h5 v-if="marginCall > 0 || marginCall === 0" class="text-success">
-			*安全水位 ${{marginCall}} ＊記得要檢查SMA
+			*安全水位 ${{marginCall}} *記得檢查SMA
 		</h5>
 		<h5 v-else-if="marginCall < 0" class="text-error">
 			*追加保證金 ${{marginCall}}
@@ -132,13 +132,21 @@
 			},
 			computed: {
 				marginCall() {
+					if (!this.cash && !this.buyCash) {
+						return null
+					}
 					const buyVolume = this.buyCash / this.buyPrice || 0
-					const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + this.buyVolume * this.lowPrice
-					console.log(this.buyCash, this.buyPrice, buyVolume, stockValue)
+					const lowPriceA = eval(this.lowPriceA)
+					const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + buyVolume * this.lowPrice
 					const elv = this.cash + stockValue
 					const mm = stockValue * 0.25
 					return elv - mm
 				},
+			},
+			methods: {
+				eval(str) {
+					return eval(str)
+				}
 			},
 			watch: {
 				$data: {
