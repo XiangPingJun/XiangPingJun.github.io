@@ -5,6 +5,21 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
 	<script src="https://unpkg.com/vue@2.6.12"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+	<script>
+		firebase.initializeApp({
+			apiKey: "AIzaSyCQbSH8tz42e9YLB7-8ix_K7ruHNJzpU3o",
+			authDomain: "ib-margin.firebaseapp.com",
+			databaseURL: "https://ib-margin-default-rtdb.firebaseio.com/",
+			storageBucket: "ib-margin.appspot.com",
+			messagingSenderId: "851154069561",
+		})
+	</script>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
 	<title>IB Margin Call Calculator</title>
 </head>
 
@@ -110,56 +125,44 @@
 	</div>
 
 	<script>
-		console.log(chrome.storage)
-		chrome.storage.sync.get(['data'], function(data) {
-			console.log(data)
-		})
-		new Vue({
-			el: '#app',
-			data() {
-				return {
-					cash: 0,
-					symbolA: '',
-					volumeA: 0,
-					lowPriceA: 0,
-					symbolB: '',
-					volumeB: 0,
-					lowPriceB: 0,
-					symbolC: '',
-					volumeC: 0,
-					lowPriceC: 0,
-					...JSON.parse(localStorage.data || '{}'),
-					buyCash: 0,
-					buyPrice: 0,
-					lowPrice: 0,
-				}
-			},
-			computed: {
-				marginCall() {
-					if (!this.cash && !this.buyCash) {
-						return null
+		firebase.database().ref('/data').once('value').then((snap) => {
+			new Vue({
+				el: '#app',
+				data() {
+					return {
+						...snap.val(),
+						buyCash: 0,
+						buyPrice: 0,
+						lowPrice: 0,
 					}
-					const buyVolume = this.buyCash / this.buyPrice || 0
-					const lowPriceA = eval(this.lowPriceA)
-					const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + buyVolume * this.lowPrice
-					const elv = this.cash + stockValue
-					const mm = stockValue * 0.25
-					return elv - mm
 				},
-			},
-			methods: {
-				eval(str) {
-					return eval(str)
-				}
-			},
-			watch: {
-				$data: {
-					handler: function (data) {
-						chrome.storage.local.set({ data })
+				computed: {
+					marginCall() {
+						if (!this.cash && !this.buyCash) {
+							return null
+						}
+						const buyVolume = this.buyCash / this.buyPrice || 0
+						const lowPriceA = eval(this.lowPriceA)
+						const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + buyVolume * this.lowPrice
+						const elv = this.cash + stockValue
+						const mm = stockValue * 0.25
+						return elv - mm
 					},
-					deep: true
+				},
+				methods: {
+					eval(str) {
+						return eval(str)
+					}
+				},
+				watch: {
+					$data: {
+						handler: function (data) {
+							firebase.database().ref('/data').set(data)
+						},
+						deep: true
+					}
 				}
-			}
+			})
 		})
 	</script>
 </body>
