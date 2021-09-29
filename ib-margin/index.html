@@ -9,83 +9,97 @@
 </head>
 
 <body>
-	<div id="app" class="p-2">
-		<div class="form-horizontal">
-			<div class="form-group">
-				<div class="col-1 col-12">
-					<label class="form-label">現金</label>
-				</div>
-				<div class="col-3 col-12">
-					<input
-						v-model.number="cash"
-						@keydown.up.prevent="cash = (cash || 0) + 1000"
-						@keydown.down.prevent="cash = (cash || 0) - 1000"
-						type="number"
-						class="form-input"
-					>
-				</div>
-				<div class="col-1 col-12">
-					<span class="mx-1" />
-					<button class="btn" @click="cash = (cash || 0) + 1000" tabindex="-1">＋</button>
-					<button class="btn" @click="cash = (cash || 0) - 1000" tabindex="-1">－</button>
+	<div id="app" class="p-2" v-cloak>
+		<div class="container mb-2">
+			<div class="columns">
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">現金: </pre>
+					<input v-model.number="cash" type="number" class="form-input">
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-1 col-12">
-					<label class="form-label">現有股數</label>
+
+			<div class="columns mt-1">
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">代號A:</pre>
+					<input v-model.number="symbolA" class="form-input">
 				</div>
-				<div class="col-3 col-12">
-					<input v-model.number="volume" type="number" class="form-input">
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">現有股數A:</pre>
+					<input v-model.number="volumeA" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">保險最低價A:</pre>
+					<input v-model.number="lowPriceA" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">等值資產A: {{lowPriceA * volumeA || '--'}}</pre>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-1 col-12">
-					<label class="form-label">再買金額</label>
+
+			<div class="columns mt-1">
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">代號B:</pre>
+					<input v-model.number="symbolB" class="form-input">
 				</div>
-				<div class="col-3 col-12">
-					<input
-						v-model.number="buyCash"
-						@keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
-						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000"
-						type="number"
-						class="form-input"
-					>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">現有股數B:</pre>
+					<input v-model.number="volumeB" class="form-input">
 				</div>
-				<div class="col-1 col-12">
-					<span class="mx-1" />
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">保險最低價B:</pre>
+					<input v-model.number="lowPriceB" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">等值資產B: {{lowPriceB * volumeB || '--'}}</pre>
+				</div>
+			</div>
+
+			<div class="columns mt-1">
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">代號C:</pre>
+					<input v-model.number="symbolC" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">現有股數C:</pre>
+					<input v-model.number="volumeC" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">保險最低價C:</pre>
+					<input v-model.number="lowPriceC" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">等值資產C: {{lowPriceC * volumeC || '--'}}</pre>
+				</div>
+			</div>
+
+			<div class="columns mt-2">
+				<div class="column col-3 d-flex">
+					<pre class="form-label m-0 mr-1">再買金額:</pre>
+					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
+						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input">
+				</div>
+				<div class="column col-1">
 					<button class="btn" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
 					<button class="btn" @click="buyCash = (buyCash || 0) - 1000" tabindex="-1">－</button>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-1 col-12">
-					<label class="form-label">最新股價</label>
-				</div>
-				<div class="col-3 col-12">
+
+			<div class="columns mt-1">
+				<div class="column col-3 d-flex">
+					<pre class="form-label m-0 mr-1">最新股價:</pre>
 					<input v-model.number="buyPrice" type="number" class="form-input">
 				</div>
-				<div class="col-1 col-12">
-					<span class="mx-1" />
-					<button class="btn" @click="buyPrice = (buyPrice || 0) + 1" tabindex="-1">＋</button>
-					<button class="btn" @click="buyPrice = (buyPrice || 0) - 1" tabindex="-1">－</button>
-				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-1 col-12">
-					<label class="form-label">保險最低價</label>
-				</div>
-				<div class="col-3 col-12">
+
+			<div class="columns mt-1">
+				<div class="column col-3 d-flex">
+					<pre class="form-label m-0 mr-1">保險低價:</pre>
 					<input v-model.number="lowPrice" type="number" class="form-input">
-				</div>
-				<div class="col-1 col-12">
-					<span class="mx-1" />
-					<button class="btn" @click="lowPrice = (lowPrice || 0) + 1" tabindex="-1">＋</button>
-					<button class="btn" @click="lowPrice = (lowPrice || 0) - 1" tabindex="-1">－</button>
 				</div>
 			</div>
 		</div>
 		<h5 v-if="marginCall > 0 || marginCall === 0" class="text-success">
-			*安全水位 ${{marginCall}}
+			*安全水位 ${{marginCall}} ＊記得要檢查SMA
 		</h5>
 		<h5 v-else-if="marginCall < 0" class="text-error">
 			*追加保證金 ${{marginCall}}
@@ -100,25 +114,40 @@
 			el: '#app',
 			data() {
 				return {
-					cash: '',
-					volume: '',
-					buyCash: '',
-					buyPrice: '',
-					lowPrice: '',
+					cash: 0,
+					symbolA: '',
+					volumeA: 0,
+					lowPriceA: 0,
+					symbolB: '',
+					volumeB: 0,
+					lowPriceB: 0,
+					symbolC: '',
+					volumeC: 0,
+					lowPriceC: 0,
+					...JSON.parse(localStorage.data || '{}'),
+					buyCash: 0,
+					buyPrice: 0,
+					lowPrice: 0,
 				}
 			},
 			computed: {
 				marginCall() {
-					if (this.cash === '' || this.volume === '' || this.lowPrice === '') {
-						return null
-					}
-					if(this.buyCash && this.buyPrice) {
-						const newVolume = this.volume + Math.floor(this.buyCash / this.buyPrice)
-						return Math.floor(this.cash - (this.buyCash || 0) + this.lowPrice * newVolume * 0.75)
-					}
-					return Math.floor(this.cash + this.lowPrice * this.volume * 0.75)
+					const buyVolume = this.buyCash / this.buyPrice || 0
+					const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + this.buyVolume * this.lowPrice
+					console.log(this.buyCash, this.buyPrice, buyVolume, stockValue)
+					const elv = this.cash + stockValue
+					const mm = stockValue * 0.25
+					return elv - mm
 				},
 			},
+			watch: {
+				$data: {
+					handler: function (val) {
+						localStorage.data = JSON.stringify(val)
+					},
+					deep: true
+				}
+			}
 		})
 	</script>
 </body>
