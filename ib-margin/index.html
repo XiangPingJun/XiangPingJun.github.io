@@ -146,7 +146,7 @@
 						const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + buyVolume * this.lowPrice
 						const elv = this.cash + stockValue
 						const mm = stockValue * 0.25
-						return elv - mm
+						return Math.floor(elv - mm)
 					},
 				},
 				methods: {
