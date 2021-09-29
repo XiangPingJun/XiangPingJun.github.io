@@ -133,7 +133,7 @@
 					document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
 						.then((snap) => {
 							const val = snap.val()
-							for(const attr in val) {
+							for (const attr in val) {
 								this[attr] = val[attr]
 							}
 						}))
@@ -141,7 +141,7 @@
 				computed: {
 					buyVolume() {
 						return this.buyCash / this.buyPrice || 0
-					}
+					},
 					marginCall() {
 						if (!this.cash && !this.buyCash) {
 							return null
@@ -150,10 +150,10 @@
 						const riskPriceA = eval(this.riskPriceA)
 						const riskPriceB = eval(this.riskPriceB)
 						const riskPriceC = eval(this.riskPriceC)
-						const stockValue = riskPriceA * this.volumeA + riskPriceB * this.volumeB + riskPriceC * this.volumeC + this.buyVolume * riskPrice
-						const elv = this.cash - this.buyPrice + stockValue
+						const stockValue = riskPriceA * this.volumeA + riskPriceB * this.volumeB + riskPriceC * this.volumeC + riskPrice * this.buyVolume
+						const elv = this.cash - this.buyCash + stockValue
 						const mm = stockValue * 0.25
-						
+
 						return Math.floor(elv - mm)
 					},
 				},
