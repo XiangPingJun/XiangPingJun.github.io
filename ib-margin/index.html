@@ -107,7 +107,7 @@
 			<div class="columns mt-1">
 				<div class="column col-4 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model.number="riskPrice" type="number" class="form-input">
+					<input v-model.number="riskPrice" class="form-input">
 				</div>
 			</div>
 		</div>
@@ -154,7 +154,7 @@
 						const riskPriceB = eval(this.riskPriceB)
 						const riskPriceC = eval(this.riskPriceC)
 						const stockValue = riskPriceA * this.volumeA + riskPriceB * this.volumeB + riskPriceC * this.volumeC + buyVolume * riskPrice
-						const elv = this.cash + stockValue
+						const elv = this.cash - this.buyPrice + stockValue
 						const mm = stockValue * 0.25
 						return Math.floor(elv - mm)
 					},
