@@ -44,10 +44,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="lowPriceA" class="form-input">
+					<input v-model="riskPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceA) * volumeA) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceA) * volumeA) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -62,10 +62,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="lowPriceB" class="form-input">
+					<input v-model="riskPriceB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceB) * volumeB) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceB) * volumeB) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -80,10 +80,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="lowPriceC" class="form-input">
+					<input v-model="riskPriceC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:{{Math.floor(eval(lowPriceC) * volumeC) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceC) * volumeC) || '--'}}</pre>
 				</div>
 			</div>
 
@@ -91,11 +91,9 @@
 				<div class="column col-3 d-flex">
 					<pre class="form-label m-0 mr-1">再買額:</pre>
 					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
-						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input">
-				</div>
-				<div class="column col-1 d-flex">
-					<button class="btn" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
-					<button class="btn" @click="buyCash = (buyCash || 0) - 1000" tabindex="-1">－</button>
+						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" type="number" class="form-input mr-1">
+					<button class="btn mr-1" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
+					<button class="btn mr-1" @click="buyCash = (buyCash || 0) - 1000" tabindex="-1">－</button>
 				</div>
 			</div>
 
@@ -109,7 +107,7 @@
 			<div class="columns mt-1">
 				<div class="column col-3 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model.number="lowPrice" type="number" class="form-input">
+					<input v-model.number="riskPrice" type="number" class="form-input">
 				</div>
 			</div>
 		</div>
@@ -133,7 +131,7 @@
 						...snap.val(),
 						buyCash: 0,
 						buyPrice: 0,
-						lowPrice: 0,
+						riskPrice: 0,
 					}
 				},
 				computed: {
@@ -142,8 +140,11 @@
 							return null
 						}
 						const buyVolume = this.buyCash / this.buyPrice || 0
-						const lowPriceA = eval(this.lowPriceA)
-						const stockValue = this.lowPriceA * this.volumeA + this.lowPriceB * this.volumeB + this.lowPriceC * this.volumeC + buyVolume * this.lowPrice
+						const riskPrice = eval(this.riskPrice)
+						const riskPriceA = eval(this.riskPriceA)
+						const riskPriceB = eval(this.riskPriceB)
+						const riskPriceC = eval(this.riskPriceC)
+						const stockValue = riskPriceA * this.volumeA + riskPriceB * this.volumeB + riskPriceC * this.volumeC + buyVolume * riskPrice
 						const elv = this.cash + stockValue
 						const mm = stockValue * 0.25
 						return Math.floor(elv - mm)
