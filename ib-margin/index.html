@@ -107,6 +107,8 @@
 			
 			<div class="columns mt-1">
 				<div class="column col-12 d-flex">
+					半半額: ${{Math.floor(buyCash / 4) || '--'}}
+					半半量: {{Math.floor(buyVolume / 4) || '--'}}
 					半額: ${{Math.floor(buyCash / 2) || '--'}}
 					半量: {{Math.floor(buyVolume / 2) || '--'}}
 					全量: {{Math.floor(buyVolume) || '--'}}
