@@ -44,7 +44,7 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceA" class="form-input">
+					<input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceA) * volumeA) || '--'}}</pre>
@@ -62,7 +62,7 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceB" class="form-input">
+					<input v-model="riskPriceB" class="form-input" v-on:keyup.enter="riskPriceB = eval(riskPriceB) || riskPriceB">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceB) * volumeB) || '--'}}</pre>
@@ -80,7 +80,7 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceC" class="form-input">
+					<input v-model="riskPriceC" class="form-input" v-on:keyup.enter="riskPriceC = eval(riskPriceC) || riskPriceC">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceC) * volumeC) || '--'}}</pre>
