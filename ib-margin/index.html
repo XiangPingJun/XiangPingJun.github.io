@@ -151,10 +151,13 @@
 							return null
 						}
 						const riskPrice = eval(this.riskPrice)
-						const riskPriceA = eval(this.riskPriceA)
-						const riskPriceB = eval(this.riskPriceB)
-						const riskPriceC = eval(this.riskPriceC)
-						const stockValue = riskPriceA * this.volumeA + riskPriceB * this.volumeB + riskPriceC * this.volumeC + riskPrice * this.buyVolume
+						const riskPriceA = eval(this.riskPriceA) || 0
+						const riskPriceB = eval(this.riskPriceB) || 0
+						const riskPriceC = eval(this.riskPriceC) || 0
+						const volumeA = this.volumeA || 0
+						const volumeB = this.volumeB || 0
+						const volumeC = this.volumeC || 0
+						const stockValue = riskPriceA * volumeA + riskPriceB * volumeB + riskPriceC * volumeC + riskPrice * this.buyVolume
 						const elv = this.cash - this.buyCash + stockValue
 						const mm = stockValue * 0.25
 
