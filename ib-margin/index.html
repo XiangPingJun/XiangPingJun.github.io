@@ -159,9 +159,9 @@
 						const volumeC = this.volumeC || 0
 						const stockValue = riskPriceA * volumeA + riskPriceB * volumeB + riskPriceC * volumeC + riskPrice * this.buyVolume
 						const elv = this.cash - this.buyCash + stockValue
-						const mm = stockValue * 0.25
+						const margin = stockValue * 0.5
 
-						return Math.floor(elv - mm)
+						return Math.floor(elv - margin)
 					},
 				},
 				methods: {
