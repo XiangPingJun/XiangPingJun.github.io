@@ -33,9 +33,9 @@
 				</div>
 			</div>
 
-			<div class="columns mt-1">
+			<div class="columns mt-2">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號:</pre>
+					<pre class="form-label m-0 mr-1">股票:</pre>
 					<input v-model.number="symbolA" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -46,14 +46,10 @@
 					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
 				</div>
-				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceA) * volumeA) || '--'}}</pre>
-				</div>
 			</div>
-
 			<div class="columns mt-1">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號:</pre>
+					<pre class="form-label m-0 mr-1">股票:</pre>
 					<input v-model.number="symbolB" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -64,14 +60,11 @@
 					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="riskPriceB" class="form-input" v-on:keyup.enter="riskPriceB = eval(riskPriceB) || riskPriceB">
 				</div>
-				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceB) * volumeB) || '--'}}</pre>
-				</div>
 			</div>
 
 			<div class="columns mt-1">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">代號:</pre>
+					<pre class="form-label m-0 mr-1">股票:</pre>
 					<input v-model.number="symbolC" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
@@ -82,14 +75,30 @@
 					<pre class="form-label m-0 mr-1">風險價:</pre>
 					<input v-model="riskPriceC" class="form-input" v-on:keyup.enter="riskPriceC = eval(riskPriceC) || riskPriceC">
 				</div>
+			</div>
+
+			<div class="columns mt-2">
 				<div class="column col-2 d-flex">
-					<pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceC) * volumeC) || '--'}}</pre>
+					<pre class="form-label m-0 mr-1">PUT:</pre>
+					<input v-model.number="symbolZ" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">現有量:</pre>
+					<input v-model.number="volumeZ" type="number" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">開倉價:</pre>
+					<input v-model="openPriceZ" class="form-input" v-on:keyup.enter="openPriceZ = eval(openPriceZ) || openPriceZ">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 mr-1">風險價:</pre>
+					<input v-model="riskPriceZ" class="form-input" v-on:keyup.enter="riskPriceZ = eval(riskPriceZ) || riskPriceZ">
 				</div>
 			</div>
 
 			<div class="columns mt-2">
 				<div class="column col-3 d-flex">
-					<pre class="form-label m-0 mr-1">再買額:</pre>
+					<pre class="form-label m-0 mr-1">買股:</pre>
 					<input v-model.number="buyCash" @keydown.up.prevent="buyCash = (buyCash || 0) + 1000"
 						@keydown.down.prevent="buyCash = (buyCash || 0) - 1000" class="form-input mr-1">
 					<button class="btn mr-1" @click="buyCash = (buyCash || 0) + 1000" tabindex="-1">＋</button>
@@ -107,19 +116,17 @@
 			
 			<div class="columns mt-1">
 				<div class="column col-12 d-flex">
-					半半額: ${{Math.floor(buyCash / 4) || '--'}}
-					半半量: {{Math.floor(buyVolume / 4) || '--'}}
 					半額: ${{Math.floor(buyCash / 2) || '--'}}
 					半量: {{Math.floor(buyVolume / 2) || '--'}}
 					全量: {{Math.floor(buyVolume) || '--'}}
 				</div>
 			</div>
 		</div>
-		<h5 v-if="marginCall > 0 || marginCall === 0" class="text-success">
-			*安全水位 ${{marginCall}} *記得檢查SMA
+		<h5 v-if="excessLiquidity > 0 || excessLiquidity === 0" class="text-success">
+			*安全水位 ${{excessLiquidity}} *記得檢查SMA
 		</h5>
-		<h5 v-else-if="marginCall < 0" class="text-error">
-			*追加保證金 ${{marginCall}}
+		<h5 v-else-if="excessLiquidity < 0" class="text-error">
+			*追加保證金 ${{excessLiquidity}}
 		</h5>
 		<h5 v-else class="text-warning">
 			*請填妥欄位
@@ -130,9 +137,7 @@
 		firebase.database().ref('/data').once('value').then((snap) => {
 			new Vue({
 				el: '#app',
-				data() {
-					return snap.val()
-				},
+				data: () => snap.val(),
 				mounted() {
 					document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
 						.then((snap) => {
@@ -146,7 +151,7 @@
 					buyVolume() {
 						return this.buyCash / this.buyPrice || 0
 					},
-					marginCall() {
+					excessLiquidity() {
 						if (!this.cash && !this.buyCash) {
 							return null
 						}
@@ -158,10 +163,19 @@
 						const volumeB = this.volumeB || 0
 						const volumeC = this.volumeC || 0
 						const stockValue = riskPriceA * volumeA + riskPriceB * volumeB + riskPriceC * volumeC + riskPrice * this.buyVolume
-						const elv = this.cash - this.buyCash + stockValue
-						const margin = stockValue * 0.5
+						const stockMargin = stockValue * 0.5
 
-						return Math.floor(elv - margin)
+						const riskPriceZ = eval(this.riskPriceZ) || 0
+						const volumeZ = this.volumeZ || 0
+						const optionsLoss = (this.openPriceZ - riskPriceZ) * volumeZ
+						const optionsMargin = 0.2 * this.openPriceZ * volumeZ
+
+						// 含貸款價値的權益 (Equity with Loan Value)
+						const elv = this.cash + stockValue - optionsLoss - this.buyCash
+						// 維持保証金 (Maintenance Margin)
+						const mm = stockMargin + optionsMargin
+
+						return Math.floor(elv - mm)
 					},
 				},
 				methods: {
