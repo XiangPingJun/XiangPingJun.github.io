@@ -44,7 +44,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
+					<input v-model="riskPriceA" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 ml-1">${{eval(riskPriceA) || ''}}</pre>
 				</div>
 			</div>
 			<div class="columns mt-1">
@@ -58,7 +61,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceB" class="form-input" v-on:keyup.enter="riskPriceB = eval(riskPriceB) || riskPriceB">
+					<input v-model="riskPriceB" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 ml-1">${{eval(riskPriceB) || ''}}</pre>
 				</div>
 			</div>
 
@@ -73,7 +79,10 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceC" class="form-input" v-on:keyup.enter="riskPriceC = eval(riskPriceC) || riskPriceC">
+					<input v-model="riskPriceC" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 ml-1">${{eval(riskPriceC) || ''}}</pre>
 				</div>
 			</div>
 
@@ -88,11 +97,14 @@
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">開倉價:</pre>
-					<input v-model="openPriceZ" class="form-input" v-on:keyup.enter="openPriceZ = eval(openPriceZ) || openPriceZ">
+					<input v-model="openPriceZ" class="form-input">
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">風險價:</pre>
-					<input v-model="riskPriceZ" class="form-input" v-on:keyup.enter="riskPriceZ = eval(riskPriceZ) || riskPriceZ">
+					<input v-model="riskPriceZ" class="form-input">
+				</div>
+				<div class="column col-2 d-flex">
+					<pre class="form-label m-0 ml-1">${{eval(riskPriceZ) || ''}}</pre>
 				</div>
 			</div>
 
