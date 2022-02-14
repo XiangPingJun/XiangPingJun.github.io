@@ -179,8 +179,9 @@
 
 						const riskPriceZ = eval(this.riskPriceZ) || 0
 						const volumeZ = this.volumeZ || 0
-						const optionsLoss = (this.openPriceZ - riskPriceZ) * volumeZ
-						const optionsMargin = 0.2 * this.openPriceZ * volumeZ
+						const openPriceZ = this.openPriceZ || 0
+						const optionsLoss = (openPriceZ - riskPriceZ) * volumeZ
+						const optionsMargin = 0.2 * openPriceZ * volumeZ
 
 						// 含貸款價値的權益 (Equity with Loan Value)
 						const elv = this.cash + stockValue - optionsLoss - this.buyCash
