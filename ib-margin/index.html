@@ -187,6 +187,7 @@
 						const elv = this.cash + stockValue - optionsLoss - this.buyCash
 						// 維持保証金 (Maintenance Margin)
 						const mm = stockMargin + optionsMargin
+						console.log({ elv, mm })
 
 						return Math.floor(elv - mm)
 					},
