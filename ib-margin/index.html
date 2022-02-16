@@ -28,18 +28,14 @@
     <div class="container mb-2">
       <div class="columns">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現金:</pre>
+          <pre class="form-label m-0 mr-1">現金({{simu ? '模擬倉' : '真倉'}}):</pre>
           <input v-model="cash" class="form-input">
         </div>
       </div>
 
       <div class="columns mt-2">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">股票:</pre>
-          <input v-model="symbolA" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
+          <pre class="form-label m-0 mr-1">股票持倉:</pre>
           <input v-model="volumeA" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
@@ -52,11 +48,7 @@
       </div>
       <div class="columns mt-1">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">股票:</pre>
-          <input v-model="symbolB" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
+          <pre class="form-label m-0 mr-1">股票持倉:</pre>
           <input v-model="volumeB" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
@@ -70,11 +62,7 @@
 
       <div class="columns mt-1">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">股票:</pre>
-          <input v-model="symbolC" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
+          <pre class="form-label m-0 mr-1">股票持倉:</pre>
           <input v-model="volumeC" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
@@ -88,11 +76,7 @@
 
       <div class="columns mt-2">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">PUT:</pre>
-          <input v-model="symbolZ" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
+          <pre class="form-label m-0 mr-1">PUT持倉:</pre>
           <input v-model="volumeZ" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
@@ -127,16 +111,10 @@
       </div>
 
       <div class="columns">
-        <div class="column col-8 d-flex" style="align-items: center ;">
+        <div class="column col-12">
           半額: ${{Math.floor(buyCash / 2) || '--'}}
           半量: {{Math.floor(buyVolume / 2) || '--'}}
           全量: {{Math.floor(buyVolume) || '--'}}
-          <div class="form-group ml-2">
-            <label class="form-switch">
-              <input type="checkbox" v-model="sync">
-              <i class="form-icon"></i> 同步至雲端
-            </label>
-          </div>
         </div>
       </div>
     </div>
@@ -152,12 +130,15 @@
   </div>
 
   <script>
-    firebase.database().ref('/data').once('value').then((snap) => {
+    const simu = window.location.search === '?simu'
+    const dataPath = simu ? '/simu' : '/data'
+    
+    firebase.database(dataPath).ref().once('value').then((snap) => {
       new Vue({
         el: '#app',
-        data: () => ({ ...snap.val(), sync: true }),
+        data: () => ({ ...snap.val(), simu }),
         mounted() {
-          document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
+          document.addEventListener("visibilitychange", () => firebase.database().ref(dataPath).once('value')
             .then((snap) => {
               const val = snap.val()
               for (const attr in val) {
@@ -210,9 +191,7 @@
         watch: {
           $data: {
             handler: function (data) {
-              if (this.sync) {
-                firebase.database().ref('/data').set(data)
-              }
+              firebase.database().ref(dataPath).set(data)
             },
             deep: true
           }
