@@ -133,7 +133,7 @@
     const simu = window.location.search === '?simu'
     const dataPath = simu ? '/simu' : '/data'
     
-    firebase.database(dataPath).ref().once('value').then((snap) => {
+    firebase.database().ref(dataPath).once('value').then((snap) => {
       new Vue({
         el: '#app',
         data: () => ({ ...snap.val(), simu }),
