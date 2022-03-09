@@ -107,11 +107,7 @@
 			
 			<div class="columns mt-1">
 				<div class="column col-12 d-flex">
-					半半額: ${{Math.floor(buyCash / 4) || '--'}}
-					半半量: {{Math.floor(buyVolume / 4) || '--'}}
-					半額: ${{Math.floor(buyCash / 2) || '--'}}
-					半量: {{Math.floor(buyVolume / 2) || '--'}}
-					全量: {{Math.floor(buyVolume) || '--'}}
+					量: {{Math.floor(buyVolume) || '--'}}
 				</div>
 			</div>
 		</div>
@@ -158,7 +154,7 @@
 						const volumeB = this.volumeB || 0
 						const volumeC = this.volumeC || 0
 						const stockValue = riskPriceA * volumeA + riskPriceB * volumeB + riskPriceC * volumeC + riskPrice * this.buyVolume
-						const elv = this.cash - this.buyCash + stockValue
+						const elv = this.cash - this.buyPrice * this.buyVolume + stockValue
 						const margin = stockValue * 0.25
 
 						return Math.floor(elv - margin)
