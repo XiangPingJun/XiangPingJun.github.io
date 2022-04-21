@@ -90,10 +90,10 @@
 			<div class="columns mt-2">
 				<div class="column col-3 d-flex">
 					<pre class="form-label m-0 mr-1">再買量:</pre>
-					<input v-model.number="buyVolume" @keydown.up.prevent="buyVolume = (buyVolume || 0) + 1"
-						@keydown.down.prevent="buyVolume = (buyVolume || 0) - 1" class="form-input mr-1">
-					<button class="btn mr-1" @click="buyVolume = (buyVolume || 0) + 1" tabindex="-1">＋</button>
-					<button class="btn mr-1" @click="buyVolume = (buyVolume || 0) - 1" tabindex="-1">－</button>
+					<input v-model.number="buyVolume" @keydown.up.prevent="buyVolume = (buyVolume || 0) + 5"
+						@keydown.down.prevent="buyVolume = (buyVolume || 0) - 5" class="form-input mr-1">
+					<button class="btn mr-1" @click="buyVolume = (buyVolume || 0) + 5" tabindex="-1">＋</button>
+					<button class="btn mr-1" @click="buyVolume = (buyVolume || 0) - 5" tabindex="-1">－</button>
 				</div>
 				<div class="column col-2 d-flex">
 					<pre class="form-label m-0 mr-1">最新價:</pre>
@@ -141,7 +141,7 @@
 						return riskPriceA * volumeA + riskPriceB * volumeB + riskPriceC * volumeC + riskPrice * this.buyVolume
 					},
 					elv() {
-						return Math.floor(this.cash + this.stockValue)
+						return Math.floor(this.cash + this.stockValue - this.buyPrice * this.buyVolume)
 					},
 					margin() {
 						return Math.floor(this.stockValue * 0.2)
