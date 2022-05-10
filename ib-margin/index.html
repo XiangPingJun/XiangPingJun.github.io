@@ -35,56 +35,56 @@
           <pre class="form-label m-0 mr-1">保證金率:</pre>
           <input type="number" v-model="marginRate" type="number" step="any" class="form-input">
         </div>
-      </div>
-
-      <div class="columns mt-1">
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">代號:</pre>
-          <input v-model.number="symbolA" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
-          <input v-model.number="volumeA" type="number" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">風險價:</pre>
-          <input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceA) * volumeA) || '--'}}</pre>
-        </div>
-      </div>
-
-      <div class="columns mt-1">
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">代號:</pre>
-          <input v-model.number="symbolB" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現有量:</pre>
-          <input v-model.number="volumeB" type="number" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">風險價:</pre>
-          <input v-model="riskPriceB" class="form-input" v-on:keyup.enter="riskPriceB = eval(riskPriceB) || riskPriceB">
-        </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">風險淨值:${{Math.floor(eval(riskPriceB) * volumeB) || '--'}}</pre>
+        <div class="column col-2 d-flex" v-if="elv < 100000">
+          <pre class="form-label m-0 mr-1 text-warning">(清算價值<$100000，使用0.25</pre>
         </div>
       </div>
 
       <div class="columns mt-2">
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">再買量:</pre>
+          <pre class="form-label m-0 mr-1">代號:</pre>
+          <input v-model.number="symbolA" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">持有:</pre>
+          <input v-model.number="volumeA" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">風險:</pre>
+          <input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買股:</pre>
           <input v-model.number="buyVolume" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">最新價:</pre>
+          <pre class="form-label m-0 mr-1">現價:</pre>
           <input v-model.number="buyPrice" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">風險價:</pre>
+          <pre class="form-label m-0 mr-1">風險:</pre>
           <input v-model="riskPrice" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣股:</pre>
+          <input v-model.number="sellVolume" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現價:</pre>
+          <input v-model.number="sellPrice" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">成本:</pre>
+          <input v-model.number="sellCostPrice" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">盈虧 ${{(sellPrice - sellCostPrice) * sellVolume}}</pre>
         </div>
       </div>
     </div>
@@ -116,17 +116,23 @@
           stockValue() {
             const riskPrice = eval(this.riskPrice) || 0
             const riskPriceA = eval(this.riskPriceA) || 0
-            const riskPriceB = eval(this.riskPriceB) || 0
             const volumeA = this.volumeA || 0
-            const volumeB = this.volumeB || 0
-            return riskPriceA * volumeA + riskPriceB * volumeB + riskPrice * this.buyVolume
+            const sellVolume = this.sellVolume || 0
+            return riskPriceA * (volumeA - sellVolume) + riskPrice * this.buyVolume
           },
           elv() {
-            return Math.floor(this.cash + this.stockValue - this.buyPrice * this.buyVolume)
+            const buyPrice = this.buyPrice || 0
+            const buyVolume = this.buyVolume || 0
+            const sellPrice = this.sellPrice || 0
+            const sellVolume = this.sellVolume || 0
+            return Math.floor(this.cash + this.stockValue - buyPrice * buyVolume + sellPrice * sellVolume)
           },
           margin() {
-            const marginRate = eval(this.marginRate) || 0
-            return Math.floor(this.stockValue * this.marginRate)
+            let marginRate = eval(this.marginRate) || 0
+            if (this.elv < 100000) {
+              marginRate = 0.25
+            }
+            return Math.floor(this.stockValue * marginRate)
           },
         },
         methods: {
