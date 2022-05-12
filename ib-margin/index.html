@@ -35,9 +35,6 @@
           <pre class="form-label m-0 mr-1">保證金率:</pre>
           <input type="number" v-model="marginRate" type="number" step="any" class="form-input">
         </div>
-        <div class="column col-2 d-flex" v-if="elv < 100000">
-          <pre class="form-label m-0 mr-1 text-warning">(清算價值<$100000，使用0.25</pre>
-        </div>
       </div>
 
       <div class="columns mt-2">
@@ -46,12 +43,12 @@
           <input v-model.number="symbolA" class="form-input">
         </div>
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">持有:</pre>
+          <pre class="form-label m-0 mr-1">持倉:</pre>
           <input v-model.number="volumeA" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">風險:</pre>
-          <input v-model="riskPriceA" v-on:keyup.enter="riskPriceA = eval(riskPriceA) || riskPriceA" class="form-input">
+          <input v-model.number="riskPriceA" type="number" step="1" class="form-input">
         </div>
       </div>
 
@@ -62,7 +59,7 @@
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">現價:</pre>
-          <input v-model.number="buyPrice" type="number" class="form-input">
+          <input v-model.number="buyPrice" type="number" step="1" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">風險:</pre>
@@ -128,10 +125,7 @@
             return Math.floor(this.cash + this.stockValue - buyPrice * buyVolume + sellPrice * sellVolume)
           },
           margin() {
-            let marginRate = eval(this.marginRate) || 0
-            if (this.elv < 100000) {
-              marginRate = 0.25
-            }
+            const marginRate = eval(this.marginRate) || 0
             return Math.floor(this.stockValue * marginRate)
           },
         },
