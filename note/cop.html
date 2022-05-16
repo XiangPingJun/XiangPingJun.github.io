@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script>
+    const text = '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'
+
+    function encrypt() {
+      const key = document.getElementById('encKey').value
+      const value = document.getElementById('text').value
+      let cipher = CryptoJS.AES.encrypt(value, key)
+      cipher = cipher.toString()
+      document.getElementById('text').value = cipher
+    }
+
+    function decrypt() {
+      try {
+        const key = document.getElementById('decKey').value
+        let decipher = CryptoJS.AES.decrypt(text, key)
+        decipher = decipher.toString(CryptoJS.enc.Utf8)
+        document.getElementById('text').value = decipher
+      } catch (err) {
+        document.getElementById('decKey').style.color = 'red'
+        throw err
+      }
+      document.getElementById('decKey').style.color = 'black'
+    }
+  </script>
+  <style>
+    * {
+      font-size: 16px !important;
+    }
+  </style>
+</head>
+
+<body>
+  dec:<input id="decKey" type="password" style="margin-top: 5px;"
+    onKeydown="javascript: if (event.keyCode===13) decrypt()" />
+  <button onclick="decrypt()">Go</button>
+  <br />
+  enc:<input id="encKey" type="password" style="margin-top: 5px;"
+    onKeydown="javascript: if (event.keyCode===13) encrypt()" />
+  <div>
+    <textarea id="text" style="width: 100%; height: 90vh; margin-top: 5px;"></textarea>
+  </div>
+
+  <script>
+    document.getElementById('decKey').focus()
+  </script>
+</body>
+
+</html>
