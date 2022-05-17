@@ -16,7 +16,7 @@
     function decrypt() {
       try {
         const key = document.getElementById('decKey').value
-        let decipher = CryptoJS.AES.decrypt(text, key)
+        let decipher = CryptoJS.AES.decrypt(document.getElementById('text').value || text, key)
         decipher = decipher.toString(CryptoJS.enc.Utf8)
         document.getElementById('text').value = decipher
       } catch (err) {
