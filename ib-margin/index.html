@@ -50,6 +50,10 @@
           <pre class="form-label m-0 mr-1">風險:</pre>
           <input v-model.number="riskPriceA" type="number" step="1" class="form-input">
         </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">均價:</pre>
+          <input v-model.number="averageCostA" type="number" step="1" class="form-input">
+        </div>
       </div>
 
       <div class="columns mt-2">
@@ -75,14 +79,17 @@
       </div>
     </div>
     <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
-      *清算價值 ${{elv}} *保證金 ${{margin}} *差值 ${{elv - margin}}
+      <span class="mr-1">
+        *保證金${{margin}} *差值${{elv - margin}}
+      </span>
+      <span v-if="elv - margin < 0">
+        *強平後{{liquidated.lVolumeA}}股 *漲回後價值${{liquidated.lCash + liquidated.lVolumeA * averageCostA}}
+      </span>
     </h5>
     <h5 v-else class="text-warning">
       *請填妥欄位
     </h5>
-    <h5 v-if="elv - margin < 0" class="text-error">
-      *強平後 ${{liquidated.lVolumeA}} 股，現金 ${{liquidated.lCash}}
-    </h5>
+
   </div>
 
   <script>
