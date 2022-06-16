@@ -29,7 +29,11 @@
       <div class="columns">
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">現金:</pre>
-          <input v-model.number="cash" type="number" class="form-input">
+          <input v-model.number="currCash" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">轉入:</pre>
+          <input v-model.number="remit" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">保證金率:</pre>
@@ -109,6 +113,9 @@
             }))
         },
         computed: {
+          cash() {
+            return this.currCash + this.remit
+          },
           stockValue() {
             const riskPriceA = eval(this.riskPriceA) || 0
             const volumeA = this.volumeA || 0
