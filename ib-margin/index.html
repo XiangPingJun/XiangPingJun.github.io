@@ -133,11 +133,11 @@
             let lVolumeA = this.volumeA
             let lCash = this.cash
             let j = 0
-            for (i = this.riskPriceA * 2; i >= this.riskPriceA; i--) {
+            for (i = Math.max(this.riskPriceA * 2, 0); i >= this.riskPriceA; i--) {
               let stockValue = i * lVolumeA
               let elv = lCash + stockValue
               let margin = stockValue * this.marginRate
-              while (elv < margin) {
+              while (elv < margin && lVolumeA > 0) {
                 lVolumeA--
                 lCash += i
                 stockValue = i * lVolumeA
