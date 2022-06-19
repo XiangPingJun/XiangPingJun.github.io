@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -130,8 +131,10 @@
             return Math.floor(this.stockValue * marginRate)
           },
           liquidated() {
-            let lVolumeA = this.volumeA
-            let lCash = this.cash
+		    const sellPrice = this.sellPrice || 0
+            const sellVolume = this.sellVolume || 0
+            let lVolumeA = this.volumeA - sellVolume
+            let lCash = this.cash + sellPrice * sellVolume
             let j = 0
             for (i = Math.max(this.riskPriceA * 2, 0); i >= this.riskPriceA; i--) {
               let stockValue = i * lVolumeA
