@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
 
@@ -111,7 +112,7 @@
         },
         computed: {
           cash() {
-            return this.currCash + this.remit
+            return this.currCash + (this.remit || 0)
           },
           stockValue() {
             const riskPriceA = eval(this.riskPriceA) || 0
