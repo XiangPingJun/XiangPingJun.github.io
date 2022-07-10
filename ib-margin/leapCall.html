@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <script src="https://unpkg.com/vue@2.6.12"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyCQbSH8tz42e9YLB7-8ix_K7ruHNJzpU3o",
+      authDomain: "ib-margin.firebaseapp.com",
+      databaseURL: "https://ib-margin-default-rtdb.firebaseio.com/",
+      storageBucket: "ib-margin.appspot.com",
+      messagingSenderId: "851154069561",
+    })
+  </script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  <title>IB LEAP Call Margin Calculator</title>
+</head>
+
+<body>
+  <div id="app" class="p-2" v-cloak>
+    <div class="container mb-2">
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現金:</pre>
+          <input v-model.number="currCash" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">轉入:</pre>
+          <input v-model.number="remit" type="number" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">持倉:</pre>
+          <input v-model.number="volume0" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買價:</pre>
+          <input v-model.number="cost0" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">風險價:</pre>
+          <input v-model.number="riskPrice0" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">單位保證金:</pre>
+          <input v-model.number="margin0" type="number" step="1" class="form-input">
+        </div>
+      </div>
+
+    </div>
+    <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
+      <span class="mr-1">
+        *保證金${{margin}} *差值${{elv - margin}}
+      </span>
+    </h5>
+    <h5 v-else class="text-warning">
+      *請填妥欄位
+    </h5>
+
+  </div>
+
+  <script>
+    firebase.database().ref('/leapCall').once('value').then((snap) => {
+      new Vue({
+        el: '#app',
+        data() {
+          return snap.val()
+        },
+        mounted() {
+          document.addEventListener("visibilitychange", () => firebase.database().ref('/leapCall').once('value')
+            .then((snap) => {
+              const val = snap.val()
+              for (const attr in val) {
+                this[attr] = val[attr]
+              }
+            }))
+        },
+        computed: {
+          targetLen() {
+            for (let i = 0; ; i++) {
+              if (!this[`volume${i}`]) {
+                return i
+              }
+            }
+          },
+          cash() {
+            return this.currCash + (this.remit || 0)
+          },
+          elv() {
+            let elv = this.cash
+            for (let i = 0; i < this.targetLen; i++) {
+              let vol = this[`volume${i}`] || 0
+              vol *= 100
+              const cost = this[`cost${i}`] || 0
+              const riskPrice = this[`riskPrice${i}`] || 0
+              elv += -1 * cost * vol + riskPrice * vol
+            }
+            return Math.floor(elv)
+          },
+          margin() {
+            let margin = 0
+            for (let i = 0; i < this.targetLen; i++) {
+              let vol = this[`volume${i}`] || 0
+              const m = this[`margin${i}`] || 0
+              margin += m * vol
+            }
+            return Math.floor(margin)
+          },
+        },
+        watch: {
+          $data: {
+            handler: function (data) {
+              firebase.database().ref('/leapCall').set(data)
+            },
+            deep: true
+          }
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
