@@ -25,63 +25,103 @@
 
 <body>
   <div id="app" class="p-2" v-cloak>
-    <div class="container mb-2">
+    <div class="container">
       <div class="columns">
-        <div class="column col-2 d-flex">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">現金:</pre>
-          <input v-model.number="currCash" type="number" class="form-input">
+          <input v-model.number="cash" type="number" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">轉入:</pre>
           <input v-model.number="remit" type="number" class="form-input">
         </div>
       </div>
 
-      <div class="columns mt-2">
-        <div class="column col-2 d-flex">
+      <hr />
+      <div class="columns">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">持倉:</pre>
           <input v-model.number="volumeA" type="number" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">單位:</pre>
           <input v-model.number="unitA" type="number" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">均價:</pre>
           <input v-model.number="averageCostA" type="number" step="1" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
+        <div class="column col-1 d-flex">
           <pre class="form-label m-0 mr-1">風險:</pre>
           <input v-model.number="riskPriceA" type="number" step="1" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">保證金率:</pre>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">準備率:</pre>
           <input v-model.number="marginRateA" type="number" step="0.01" class="form-input">
         </div>
       </div>
-
-      <div class="columns mt-2">
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">買:</pre>
-          <input v-model.number="buyVolume" type="number" class="form-input">
+      <div class="columns">
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">買入:</pre>
+          <input v-model.number="buyVolumeA" type="number" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現價:</pre>
-          <input v-model.number="buyPrice" type="number" step="1" class="form-input">
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">買價:</pre>
+          <input v-model.number="buyPriceA" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">賣出:</pre>
+          <input v-model.number="sellVolumeA" type="number" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">賣價:</pre>
+          <input v-model.number="sellPriceA" type="number" step="1" class="form-input">
         </div>
       </div>
 
-      <div class="columns mt-2">
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">賣:</pre>
-          <input v-model.number="sellVolume" type="number" class="form-input">
+      <hr />
+      <div class="columns">
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">持倉:</pre>
+          <input v-model.number="volumeB" type="number" class="form-input">
         </div>
-        <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">現價:</pre>
-          <input v-model.number="sellPrice" type="number" step="1" class="form-input">
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">單位:</pre>
+          <input v-model.number="unitB" type="number" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">均價:</pre>
+          <input v-model.number="averageCostB" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">風險:</pre>
+          <input v-model.number="riskPriceB" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">準備率:</pre>
+          <input v-model.number="marginRateB" type="number" step="0.01" class="form-input">
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">買入:</pre>
+          <input v-model.number="buyVolumeB" type="number" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">買價:</pre>
+          <input v-model.number="buyPriceB" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">賣出:</pre>
+          <input v-model.number="sellVolumeB" type="number" class="form-input">
+        </div>
+        <div class="column col-1 d-flex">
+          <pre class="form-label m-0 mr-1">賣價:</pre>
+          <input v-model.number="sellPriceB" type="number" step="1" class="form-input">
         </div>
       </div>
     </div>
+    <hr />
     <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
       *含貸款資產價值${{elv}} *保證金${{margin}} *差值${{elv - margin}}
     </h5>
@@ -92,64 +132,78 @@
   </div>
 
   <script>
-    firebase.database().ref('/data').once('value').then((snap) => {
+    const holdingCount = 2
+
+    const alphabets = Array.from(Array(holdingCount).keys()).map((i) => String.fromCharCode(65 + i))
+
+    const run = async () => {
+      const snapData = (await firebase.database().ref('/data').once('value')).val()
+      let newSnapData = { ...snapData }
+
+      alphabets.filter((a) => newSnapData[`volume${a}`] !== undefined).map((a) => {
+        newSnapData = {
+          ...snapData,
+          [`volume${a}`]: 0,
+          [`unit${a}`]: 0,
+          [`averageCost${a}`]: 0,
+          [`riskPrice${a}`]: 0,
+          [`marginRate${a}`]: 0,
+          [`buyVolume${a}`]: 0,
+          [`buyPrice${a}`]: 0,
+          [`sellVolume${a}`]: 0,
+          [`sellPrice${a}`]: 0,
+        }
+      })
+      await firebase.database().ref('/data').set(newSnapData)
+
       new Vue({
         el: '#app',
-        data() {
-          return snap.val()
-        },
+        data: () => newSnapData,
         mounted() {
-          document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
-            .then((snap) => {
-              const val = snap.val()
-              for (const attr in val) {
-                this[attr] = val[attr]
-              }
-            }))
+          document.addEventListener("visibilitychange", async () => {
+            const snap = await firebase.database().ref('/data').once('value')
+            const val = snap.val()
+            for (const attr in val) {
+              this[attr] = val[attr]
+            }
+          })
         },
         computed: {
-          cash() {
-            return this.currCash + (this.remit || 0)
-          },
           elv() {
+            let elv = this.cash + (this.remit || 0)
+            alphabets.forEach((a) => {
+              const volume = this[`volume${a}`] || 0
+              const unit = this[`unit${a}`] || 0
+              const averageCost = this[`averageCost${a}`] || 0
+              const riskPrice = this[`riskPrice${a}`] || 0
 
-            const volumeA = this.volumeA || 0
-            const unitA = this.unitA || 0
-            const averageCostA = this.averageCostA || 0
-            const riskPriceA = this.riskPriceA || 0
+              const buyPrice = this[`buyPrice${a}`] || 0
+              const buyVolume = this[`buyVolume${a}`] || 0
+              const sellPrice = this[`sellPrice${a}`] || 0
+              const sellVolume = this[`sellVolume${a}`] || 0
 
-            const buyPrice = this.buyPrice || 0
-            const buyVolume = this.buyVolume || 0
-            const sellPrice = this.sellPrice || 0
-            const sellVolume = this.sellVolume || 0
-
-            return Math.floor(
-              this.cash
-              + (riskPriceA - averageCostA) * volumeA * unitA
-              + (riskPriceA - buyPrice) * buyVolume * unitA
-              - (riskPriceA - sellPrice) * sellVolume * unitA
-            )
+              elv += (riskPrice - averageCost) * volume * unit
+                + (riskPrice - buyPrice) * buyVolume * unit
+                - (riskPrice - sellPrice) * sellVolume * unit
+            })
+            return Math.floor(elv)
           },
           margin() {
-            const volumeA = this.volumeA || 0
-            const unitA = this.unitA || 0
-            const marginRateA = this.marginRateA || 0
-            const riskPriceA = this.riskPriceA || 0
+            let margin = 0
+            alphabets.forEach((a) => {
+              const volume = this[`volume${a}`] || 0
+              const unit = this[`unit${a}`] || 0
+              const marginRate = this[`marginRate${a}`] || 0
+              const riskPrice = this[`riskPrice${a}`] || 0
+              const buyVolume = this[`buyVolume${a}`] || 0
+              const sellVolume = this[`sellVolume${a}`] || 0
 
-            const buyVolume = this.buyVolume || 0
-            const sellVolume = this.sellVolume || 0
-
-            return Math.floor(
-              riskPriceA * volumeA * marginRateA
-              + riskPriceA * buyVolume * marginRateA
-              - riskPriceA * sellVolume * marginRateA
-            )
+              margin += riskPrice * volume * marginRate
+                + riskPrice * buyVolume * marginRate
+                - riskPrice * sellVolume * marginRate
+            })
+            return Math.floor(margin)
           },
-        },
-        methods: {
-          eval(str) {
-            return eval(str)
-          }
         },
         watch: {
           $data: {
@@ -160,7 +214,8 @@
           }
         }
       })
-    })
+    }
+    run()
   </script>
 </body>
 
