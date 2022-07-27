@@ -25,7 +25,12 @@
       document.getElementById('kkey').style.color = 'black'
     }
     
-    setTimeout(() => location.reload(), 1800000)
+    const pageLoadTime = Date.now()
+    setInterval(() => {
+      if (Date.now() > pageLoadTime + 3600000) {
+        location.reload()
+      }
+    }, 60000)
   </script>
   <style>
     * {
