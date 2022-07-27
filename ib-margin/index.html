@@ -133,7 +133,7 @@
     </div>
     <hr />
     <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
-      *含貸款資產價值${{elv}} *保證金${{margin}} *差值${{elv - margin}}
+      *資產價值${{elv}} *保證金${{margin}} *差值${{elv - margin}}
     </h5>
     <h5 v-else class="text-warning">
       *請填妥欄位
@@ -150,7 +150,7 @@
       const snapData = (await firebase.database().ref('/data').once('value')).val()
       let newSnapData = { ...snapData }
 
-      alphabets.filter((a) => newSnapData[`volume${a}`] !== undefined).map((a) => {
+      alphabets.filter((a) => newSnapData[`volume${a}`] === undefined).map((a) => {
         newSnapData = {
           ...snapData,
           [`volume${a}`]: 0,
@@ -202,7 +202,6 @@
             let margin = 0
             alphabets.forEach((a) => {
               const volume = this[`volume${a}`] || 0
-              const unit = this[`unit${a}`] || 0
               const marginRate = this[`marginRate${a}`] || 0
               const riskPrice = this[`riskPrice${a}`] || 0
               const buyVolume = this[`buyVolume${a}`] || 0
