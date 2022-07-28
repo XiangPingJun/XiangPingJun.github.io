@@ -192,9 +192,9 @@
               const sellPrice = this[`sellPrice${a}`] || 0
               const sellVolume = this[`sellVolume${a}`] || 0
 
-              elv += (riskPrice - averageCost) * volume * unit
-                + (riskPrice - buyPrice) * buyVolume * unit
-                - (riskPrice - sellPrice) * sellVolume * unit
+              elv += (riskPrice - averageCost) * (volume - sellVolume) * unit
+              elv += (riskPrice - buyPrice) * buyVolume * unit
+              elv += (sellPrice - averageCost) * sellVolume * unit
             })
             return Math.floor(elv)
           },
@@ -206,10 +206,9 @@
               const riskPrice = this[`riskPrice${a}`] || 0
               const buyVolume = this[`buyVolume${a}`] || 0
               const sellVolume = this[`sellVolume${a}`] || 0
+              const sellPrice = this[`sellPrice${a}`] || 0
 
-              margin += riskPrice * volume * marginRate
-                + riskPrice * buyVolume * marginRate
-                - riskPrice * sellVolume * marginRate
+              margin += riskPrice * (volume + buyVolume - sellVolume) * marginRate
             })
             return Math.floor(margin)
           },
