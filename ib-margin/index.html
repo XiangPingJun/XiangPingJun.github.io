@@ -78,7 +78,7 @@
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">買價:</pre>
           <input v-model.number="buyPriceA" type="number" class="form-input"
-            :class="{ 'is-error': !buyVolumeA && buyPriceA }">
+            :class="{ 'is-error': buyVolumeA && !buyPriceA }">
         </div>
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣出:</pre>
@@ -87,7 +87,7 @@
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣價:</pre>
           <input v-model.number="sellPriceA" type="number" class="form-input"
-            :class="{ 'is-error': !sellVolumeA && sellPriceA }">
+            :class="{ 'is-error': sellVolumeA && !sellPriceA }">
         </div>
       </div>
 
@@ -122,7 +122,7 @@
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">買價:</pre>
           <input v-model.number="buyPriceB" type="number" class="form-input"
-            :class="{ 'is-error': !buyVolumeB && buyPriceB }">
+            :class="{ 'is-error': buyVolumeB && !buyPriceB }">
         </div>
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣出:</pre>
@@ -131,7 +131,7 @@
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣價:</pre>
           <input v-model.number="sellPriceB" type="number" class="form-input"
-            :class="{ 'is-error': !sellVolumeB && sellPriceB }">
+            :class="{ 'is-error': sellVolumeB && !sellPriceB }">
         </div>
       </div>
     </div>
