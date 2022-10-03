@@ -54,16 +54,12 @@
           <input v-model.number="volumeA" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">單位:</pre>
-          <input v-model.number="unitA" type="number" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">均價:</pre>
-          <input v-model.number="averageCostA" type="number" class="form-input">
+          <input v-model.number="averageCostA" type="number" step="any" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">風險:</pre>
-          <input v-model.number="riskPriceA" type="number" class="form-input">
+          <input v-model.number="riskPriceA" type="number" step="any" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">準備率:</pre>
@@ -77,7 +73,7 @@
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">買價:</pre>
-          <input v-model.number="buyPriceA" type="number" class="form-input"
+          <input v-model.number="buyPriceA" type="number" step="any" class="form-input"
             :class="{ 'is-error': buyVolumeA && !buyPriceA }">
         </div>
         <div class=" column col-2 d-flex">
@@ -86,7 +82,7 @@
         </div>
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣價:</pre>
-          <input v-model.number="sellPriceA" type="number" class="form-input"
+          <input v-model.number="sellPriceA" type="number" step="any" class="form-input"
             :class="{ 'is-error': sellVolumeA && !sellPriceA }">
         </div>
       </div>
@@ -98,16 +94,12 @@
           <input v-model.number="volumeB" type="number" class="form-input">
         </div>
         <div class="column col-2 d-flex">
-          <pre class="form-label m-0 mr-1">單位:</pre>
-          <input v-model.number="unitB" type="number" class="form-input">
-        </div>
-        <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">均價:</pre>
-          <input v-model.number="averageCostB" type="number" class="form-input">
+          <input v-model.number="averageCostB" type="number" step="any" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">風險:</pre>
-          <input v-model.number="riskPriceB" type="number" class="form-input">
+          <input v-model.number="riskPriceB" type="number" step="any" class="form-input">
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">準備率:</pre>
@@ -121,7 +113,7 @@
         </div>
         <div class="column col-2 d-flex">
           <pre class="form-label m-0 mr-1">買價:</pre>
-          <input v-model.number="buyPriceB" type="number" class="form-input"
+          <input v-model.number="buyPriceB" type="number" step="any" class="form-input"
             :class="{ 'is-error': buyVolumeB && !buyPriceB }">
         </div>
         <div class=" column col-2 d-flex">
@@ -130,7 +122,7 @@
         </div>
         <div class=" column col-2 d-flex">
           <pre class="form-label m-0 mr-1">賣價:</pre>
-          <input v-model.number="sellPriceB" type="number" class="form-input"
+          <input v-model.number="sellPriceB" type="number" step="any" class="form-input"
             :class="{ 'is-error': sellVolumeB && !sellPriceB }">
         </div>
       </div>
@@ -188,7 +180,6 @@
             let elv = this.cash + (this.remit || 0)
             alphabets.forEach((a) => {
               const volume = this[`volume${a}`] || 0
-              const unit = this[`unit${a}`] || 0
               const averageCost = this[`averageCost${a}`] || 0
               const riskPrice = this[`riskPrice${a}`] || 0
 
@@ -197,9 +188,11 @@
               const sellPrice = this[`sellPrice${a}`] || 0
               const sellVolume = this[`sellVolume${a}`] || 0
 
-              elv += (riskPrice - averageCost) * (volume - sellVolume) * unit
-              elv += (riskPrice - buyPrice) * buyVolume * unit
-              elv += (sellPrice - averageCost) * sellVolume * unit
+              console.log(volume + buyVolume - sellVolume)
+
+              elv += riskPrice * (volume + buyVolume - sellVolume)
+
+              console.log(elv)
             })
             return Math.floor(elv)
           },
