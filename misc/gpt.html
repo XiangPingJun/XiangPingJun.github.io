@@ -41,14 +41,17 @@
             </svg>
           </div>
         </div>
-        <div id="ai" style="color: rgb(209, 213, 219); white-space: pre-line; padding-left: 21px; line-height: 28px;">
+        <div style="color: rgb(209, 213, 219); padding-left: 21px; line-height: 28px;">
+          <span id="output" style="white-space: pre-line;">
+          </span>
+          <span id="end-symbol" style="display: inline;">▌</span>
         </div>
       </div>
     </div>
 
     <div style="display: flex; justify-content: center; margin-bottom: 2em;">
       <div style="width: 768px; display: flex;">
-        <input
+        <input id="input"
           style="background-color: 40414F; border: none; border-radius: 2px; color:white; font-size: 1.1em; width: 768px; padding: 12px 16px;"
           placeholder="請在此輸入文字:">
         <div style="display: flex; align-items: center;">
@@ -67,16 +70,36 @@
 </body>
 
 <script>
+  const endSylbol = document.getElementById('end-symbol')
+  const output = document.getElementById('output')
+
+
+  function typewriterAnimation(text, elementId) {
+    endSylbol.style.display = 'inline'
+    let i = 0;
+    const speed = Math.random() * 110
+    output.textContent = ''
+    function typeWriter() {
+      if (i < text.length) {
+        output.textContent += text.charAt(i)
+        i++
+        setTimeout(typeWriter, speed)
+      } else {
+        endSylbol.style.display = 'none'
+      }
+    }
+    typeWriter();
+  }
+
   // 你應該是想太多了，哪有什麼愚人節特製的AI語言模型，愚人節就是愚人節，愚人節快樂！🤪
-  document.getElementById('ai').textContent = `嗨，我是FoolGPT，一個專門為愚人節特製的語言模型！在這個特別的日子裡，我將提供一些有趣且愚人節相關的回答和建議，讓您和您的朋友們可以開心地度過這個節日。
+  typewriterAnimation(`嗨，我是FoolGPT，一個專門為愚人節特製的語言模型！在這個特別的日子裡，我將提供一些有趣且愚人節相關的回答和建議，讓您和您的朋友們可以開心地度過這個節日。
 以下是一些我可以為您做的事情：
 
 1. 提供各種愚人節惡作劇的建議，例如：假裝打電話給您的朋友，聲稱自己是名來自未來的時間旅行者；或者發送一個假的緊急通知，讓您的朋友們感到驚訝。
 2. 為您提供有關愚人節的趣味知識和歷史背景，讓您更好地了解這個節日的由來和意義。
 3. 回答您關於愚人節的任何問題，例如：為什麼愚人節通常會發生惡作劇？或者哪些國家慶祝愚人節？
 
-無論您是想開心地娛樂自己，還是希望與您的朋友們一起度過一個有趣的節日，FoolGPT都能為您提供一個愉快的愚人節體驗！
-`
+無論您是想開心地娛樂自己，還是希望與您的朋友們一起度過一個有趣的節日，FoolGPT都能為您提供一個愉快的愚人節體驗！`)
 </script>
 
 </html>
