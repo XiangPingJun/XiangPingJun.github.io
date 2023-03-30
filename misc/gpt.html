@@ -169,11 +169,11 @@
     redirect.style.display = 'flex'
 
     typewriterAnimation(`
-      您是不是想太多了？哪有什麼愚人節特製AI！
-      愚人節就是愚人節，愚人節快樂！🤪
+      您是不是想太多了？哪有什麼愚人節特製AI....
+      愚人節就是愚人節，愚人節快樂!🤪
 
       請按下方按鈕，我會幫您導向真正的2023新注音新聞愚人節速報。
-      如果你下次不想再看到我，請勾選「下次不要再讓我看到你」
+      如果下次不想再看到我，請勾選「下次不要再讓我看到你」
     `.trim())
   }
 
@@ -182,7 +182,7 @@
       hideNextTime.textContent = '☑ 下次不要再讓我看到你'
       localStorage.setItem('fool2003', true)
     } else {
-      hideNextTime.textContent = '☐ 下次不要再讓我看到你'
+      hideNextTime.textContent = '☐ 下次不要再讓我看到你！'
       localStorage.setItem('fool2003', false)
     }
   }
