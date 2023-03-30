@@ -26,6 +26,7 @@
       cursor: pointer;
       padding: 0.3rem;
       border-radius: 0.2rem;
+      display: none;
     }
 
     .send-icon svg {
@@ -65,8 +66,8 @@
 </head>
 
 <body style="background-color: #444654; color: white; margin: 0;">
-  <div style="display: flex; justify-content: center;">
-    <div class="block" style="display: flex; padding: 1rem; padding-bottom: 6rem;">
+  <div id="output-wrapper" style="display: flex; justify-content: center; min-height: calc(100vh - 4.8rem);">
+    <div class="block" style="display: flex; padding: 1rem;">
       <div>
         <div style="background-color: rgb(16, 163, 127); padding: 0.2rem;  border-radius: 0.1rem;">
           <svg style="width: 1.3rem; height: 1.3rem;" width="41" viewBox="0 0 41 41" height="41" fill="none"
@@ -85,25 +86,26 @@
     </div>
   </div>
 
-  <div
-    style="display: flex; justify-content: center; position: fixed; bottom: 0; background-color: #353641; width: 100vw;">
+  <div style="display: flex; justify-content: center; background-color: #353641; width: 100vw;">
     <div class="block">
       <div style="padding: 1rem 1.5rem; display: flex;">
-        <input id="input" onclick="onInputFocus()"
-          style="background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;"
-          placeholder="請在此輸入您的問題:">
+        <form id="form" onsubmit="reveal(); return false;" style="width: 100%; display: flex;">
+          <input id="input" disabled
+            style="background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;"
+            placeholder="載入中....">
+          <div style="display: flex; align-items: center; justify-content: center; margin-left: -2.2rem;">
+            <div id="send-icon" class="send-icon" onclick="reveal()">
+              <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </div>
+          </div>
+        </form>
         <div id="redirect" style="display:none; width: 100%; flex-direction: column; align-items: center;">
           <button onclick="redirectToOnNews()" style="margin-bottom: 0.5rem;">🚪帶我去新注音新聞</button>
-          <div id="hideNextTime" onclick="toggleHideNextTime()" style="cursor: pointer;">☐ 下次不要再讓我看到你</div>
-        </div>
-        <div style="display: flex; align-items: center; justify-content: center; margin-left: -2.2rem;">
-          <div id="send-icon" class="send-icon" onclick="reveal()">
-            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
-              stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </div>
+          <div id="hide-next-time" onclick="toggleHideNextTime()" style="cursor: pointer;">☐ 下次不要再讓我看到你</div>
         </div>
       </div>
     </div>
@@ -116,13 +118,19 @@
     window.location.replace('https://shouhei-blog.blogspot.com')
   }
 
+  if (localStorage.getItem('fool2003') === 'true') {
+    redirectToOnNews()
+  }
+
   let timeoutHandle
   const endSylbol = document.getElementById('end-symbol')
   const output = document.getElementById('output')
   const input = document.getElementById('input')
+  const form = document.getElementById('form')
   const sendIcon = document.getElementById('send-icon')
   const redirect = document.getElementById('redirect')
-  const hideNextTime = document.getElementById('hideNextTime')
+  const hideNextTime = document.getElementById('hide-next-time')
+  const outputWrapper = document.getElementById('output-wrapper')
 
   function typewriterAnimation(text, elementId) {
     endSylbol.style.display = 'inline'
@@ -137,6 +145,9 @@
         timeoutHandle = setTimeout(typeWriter, speed)
       } else {
         endSylbol.style.display = 'none'
+        sendIcon.style.display = 'block'
+        input.placeholder = '請在此輸入您的問題:'
+        input.disabled = false
       }
       document.body.scrollTop = document.body.scrollHeight
     }
@@ -160,9 +171,10 @@
 
   function reveal() {
     input.blur()
-    input.style.display = 'none'
+    form.style.display = 'none'
     sendIcon.style.display = 'none'
     redirect.style.display = 'flex'
+    outputWrapper.style.minHeight = 'calc(100vh - 6.4rem)'
 
     typewriterAnimation(`
       您是不是想太多了？哪有什麼愚人節特製AI....
