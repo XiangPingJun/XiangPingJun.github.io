@@ -42,7 +42,7 @@
       }
 
       .block {
-        width: 800px;
+        width: 700px;
       }
     }
   </style>
@@ -71,39 +71,36 @@
   </div>
 
   <div
-    style="display: flex; justify-content: center; position: fixed; bottom: 0; background-color: #353641; width: 100vw;">
+    style="display: flex; justify-content: center; position: absolute; bottom: 0; background-color: #353641; width: 100vw;">
     <div class="block">
-      <div style="padding: 1rem 1.5rem">
-        <form style="display: flex;" onsubmit="submitInput(); return false;">
-          <input id="input"
-            style="background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;"
-            placeholder="請在此輸入您的問題:">
-          <div style="display: flex; align-items: center; justify-content: center; margin-left: -2.2rem;">
-            <div class="send-icon" onclick="submitInput()">
-              <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
-                stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </div>
+      <div style="padding: 1rem 1.5rem; display: flex;">
+        <input id="input" onfocus="onInputFocus()"
+          style="background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;"
+          placeholder="請在此輸入您的問題:">
+        <button id="redirect" onfocus="redirect()"
+          style="display:none; background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;">＜請按此移至新注音新聞＞</button>
+        <div style="display: flex; align-items: center; justify-content: center; margin-left: -2.2rem;">
+          <div id="send-icon" class="send-icon" onclick="reveal()">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+              stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
           </div>
+        </div>
       </div>
-      </form>
     </div>
   </div>
 
 </body>
 
 <script>
-  if (localStorage.getItem('foolgpt')) {
-    window.location.href = 'https://shouhei-blog.blogspot.com/'
-  }
-
-  let firstSubmit = true
   let timeoutHandle
   const endSylbol = document.getElementById('end-symbol')
   const output = document.getElementById('output')
   const input = document.getElementById('input')
+  const sendIcon = document.getElementById('send-icon')
+  const redirect = document.getElementById('redirect')
 
   function typewriterAnimation(text, elementId) {
     endSylbol.style.display = 'inline'
@@ -135,23 +132,23 @@
 		無論您是想開心地娛樂自己，還是希望與您的朋友們一起度過一個有趣的節日，FoolGPT都能為您提供一個愉快的愚人節體驗！
 	`.trim())
 
-  function submitInput() {
-    if (firstSubmit) {
-      typewriterAnimation(`
-				您是不是想太多了？哪有什麼愚人節特製AI！
-				愚人節就是愚人節，愚人節快樂！🤪
+  function onInputFocus() {
+    setTimeout(reveal, 2000)
+  }
 
-				請再輸入一次任何問題，我會幫您導向真正的2023新注音新聞的愚人節速報。
-				如果你下次不想再看到我，輸入「No」就可以了。
-			`.trim())
-      firstSubmit = false
-    } else {
-      if (input.value.toLowerCase().indexOf('n') >= 0) {
-        localStorage.setItem('foolgpt', true)
-      }
-      window.location.href = 'https://shouhei-blog.blogspot.com/'
-    }
-    input.value = ''
+  function reveal() {
+    input.blur()
+    input.style.display = 'none'
+    sendIcon.style.display = 'none'
+    redirect.style.display = 'block'
+
+    typewriterAnimation(`
+      您是不是想太多了？哪有什麼愚人節特製AI！
+      愚人節就是愚人節，愚人節快樂！🤪
+
+      請按下方按鈕，我會幫您導向真正的2023新注音新聞愚人節速報。
+      如果你下次不想再看到我，請勾選「下次不要再讓我看到你」
+    `.trim())
   }
 
 </script>
