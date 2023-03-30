@@ -6,6 +6,17 @@
       text-size-adjust: none;
     }
 
+    button {
+      background-color: 40414F;
+      border: none;
+      border-radius: 0.2rem;
+      color: white;
+      padding: 0.4rem;
+      font-size: 1rem;
+      width: 100%;
+      cursor: pointer;
+    }
+
     input:focus {
       outline: none;
     }
@@ -81,8 +92,10 @@
         <input id="input" onfocus="onInputFocus()"
           style="background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;"
           placeholder="請在此輸入您的問題:">
-        <button id="redirect" onfocus="redirect()"
-          style="display:none; background-color: 40414F; border: none; border-radius: 0.2rem; color:white; padding: 0.8rem; font-size: 1rem; width: 100%;">＜請按此移至新注音新聞＞</button>
+        <div id="redirect" style="display:none; width: 100%; flex-direction: column; align-items: center;">
+          <button onclick="redirectToOnNews()" style="margin-bottom: 0.5rem;">🚪帶我去新注音新聞</button>
+          <div id="hideNextTime" onclick="toggleHideNextTime()" style="cursor: pointer;">☐ 下次不要再讓我看到你</div>
+        </div>
         <div style="display: flex; align-items: center; justify-content: center; margin-left: -2.2rem;">
           <div id="send-icon" class="send-icon" onclick="reveal()">
             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
@@ -99,12 +112,21 @@
 </body>
 
 <script>
+  function redirectToOnNews() {
+    window.location.replace('https://shouhei-blog.blogspot.com')
+  }
+
+  if (localStorage.getItem('fool2003')) {
+    redirectToOnNews()
+  }
+
   let timeoutHandle
   const endSylbol = document.getElementById('end-symbol')
   const output = document.getElementById('output')
   const input = document.getElementById('input')
   const sendIcon = document.getElementById('send-icon')
   const redirect = document.getElementById('redirect')
+  const hideNextTime = document.getElementById('hideNextTime')
 
   function typewriterAnimation(text, elementId) {
     endSylbol.style.display = 'inline'
@@ -144,7 +166,7 @@
     input.blur()
     input.style.display = 'none'
     sendIcon.style.display = 'none'
-    redirect.style.display = 'block'
+    redirect.style.display = 'flex'
 
     typewriterAnimation(`
       您是不是想太多了？哪有什麼愚人節特製AI！
@@ -153,6 +175,16 @@
       請按下方按鈕，我會幫您導向真正的2023新注音新聞愚人節速報。
       如果你下次不想再看到我，請勾選「下次不要再讓我看到你」
     `.trim())
+  }
+
+  function toggleHideNextTime() {
+    if (hideNextTime.textContent === '☐ 下次不要再讓我看到你') {
+      hideNextTime.textContent = '☑ 下次不要再讓我看到你'
+      localStorage.setItem('fool2003', true)
+    } else {
+      hideNextTime.textContent = '☐ 下次不要再讓我看到你'
+      localStorage.setItem('fool2003', false)
+    }
   }
 
 </script>
