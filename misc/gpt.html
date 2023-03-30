@@ -66,7 +66,7 @@
 </head>
 
 <body style="background-color: #444654; color: white; margin: 0;">
-  <div id="output-wrapper" style="display: flex; justify-content: center; min-height: calc(100vh - 4.8rem);">
+  <div style="display: flex; justify-content: center;">
     <div class="block" style="display: flex; padding: 1rem;">
       <div>
         <div style="background-color: rgb(16, 163, 127); padding: 0.2rem;  border-radius: 0.1rem;">
@@ -86,7 +86,8 @@
     </div>
   </div>
 
-  <div style="display: flex; justify-content: center; background-color: #353641; width: 100vw;">
+  <div
+    style="display: flex; position: fixed; bottom: 0; justify-content: center; background-color: #353641; width: 100vw;">
     <div class="block">
       <div style="padding: 1rem 1.5rem; display: flex;">
         <form id="form" onsubmit="reveal(); return false;" style="width: 100%; display: flex;">
@@ -130,7 +131,6 @@
   const sendIcon = document.getElementById('send-icon')
   const redirect = document.getElementById('redirect')
   const hideNextTime = document.getElementById('hide-next-time')
-  const outputWrapper = document.getElementById('output-wrapper')
 
   function typewriterAnimation(text, elementId) {
     endSylbol.style.display = 'inline'
@@ -174,7 +174,6 @@
     form.style.display = 'none'
     sendIcon.style.display = 'none'
     redirect.style.display = 'flex'
-    outputWrapper.style.minHeight = 'calc(100vh - 6.4rem)'
 
     typewriterAnimation(`
       您是不是想太多了？哪有什麼愚人節特製AI....
