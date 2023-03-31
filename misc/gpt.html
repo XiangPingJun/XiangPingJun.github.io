@@ -117,7 +117,7 @@
 <script>
   function redirectToOnNews() {
     window.location.replace(
-      `${(JSON.parse(window.location.search)).url}#gpt`
+      `${(JSON.parse(window.location.search.replace('?', ''))).url}#gpt`
     )
   }
 
