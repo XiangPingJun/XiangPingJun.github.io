@@ -143,7 +143,7 @@
       if (i < text.length) {
         output.textContent += text.charAt(i)
         i++
-        const speed = Math.random() * 100
+        const speed = Math.random() * 80
         timeoutHandle = setTimeout(typeWriter, speed)
       } else {
         endSylbol.style.display = 'none'
@@ -168,10 +168,6 @@
     
     現在就在下方提問框輸入您想叫我做的事情吧！
   `.trim())
-
-  function onInputFocus() {
-    setTimeout(reveal, 5000)
-  }
 
   function reveal() {
     input.blur()
