@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2c3e50;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            perspective: 1000px;
+        }
+
+        svg {
+            cursor: pointer;
+            animation: gelatine 0.5s;
+            width: 6rem;
+            height: 6rem;
+            color: #f1f1e6;
+
+
+            &.add-btn {
+                width: 3rem;
+                height: 3rem;
+                margin-left: 0.5rem;
+            }
+
+            &.stand-by {
+                color: #9fadbd;
+            }
+        }
+
+        @keyframes gelatine {
+
+            from,
+            to {
+                transform: scale(1, 1);
+            }
+
+            25% {
+                transform: scale(0.9, 1.1);
+            }
+
+            50% {
+                transform: scale(1.1, 0.9);
+            }
+
+            75% {
+                transform: scale(0.95, 1.05);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <template>
+        <svg class="stand-by" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g fill="currentColor">
+                <path fill-opacity="0" d="M20 13c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9c-4.97 0 -9 4.03 -9 9c0 0.55 0.45 1 1 1ZM14.5 21c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-4.5c0 0 -1.1 3.5 -1.1 4c0 0.5 0.35 1 0.85 1Z">
+                    <animate fill="freeze" attributeName="fill-opacity" begin="0.45s" dur="0.075s" values="0;0.3" />
+                </path>
+                <circle cx="11" cy="5" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.525s" dur="0.1s" values="0;2" />
+                </circle>
+                <circle cx="6" cy="9" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.575s" dur="0.1s" values="0;2" />
+                </circle>
+                <circle cx="16" cy="9" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.625s" dur="0.1s" values="0;2" />
+                </circle>
+            </g>
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path stroke-dasharray="12" stroke-dashoffset="12" d="M12 21h2.5c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-2.25M12 21h-2.5c-0.5 0 -0.85 -0.5 -0.85 -1c0 -0.5 1.1 -4 1.1 -4h2.25">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.15s" values="12;0" />
+                </path>
+                <path stroke-dasharray="28" stroke-dashoffset="28" d="M12 13h8c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9M12 13h-8c-0.55 0 -1 -0.45 -1 -1c0 -4.97 4.03 -9 9 -9">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.15s" dur="0.3s" values="28;0" />
+                </path>
+            </g>
+        </svg>
+
+        <svg class="survived" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g fill="currentColor">
+                <path fill-opacity="0" d="M20 13c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9c-4.97 0 -9 4.03 -9 9c0 0.55 0.45 1 1 1ZM14.5 21c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-4.5c0 0 -1.1 3.5 -1.1 4c0 0.5 0.35 1 0.85 1Z">
+                    <animate fill="freeze" attributeName="fill-opacity" begin="0.45s" dur="0.075s" values="0;0.3" />
+                </path>
+                <circle cx="11" cy="5" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.525s" dur="0.1s" values="0;2" />
+                </circle>
+                <circle cx="6" cy="9" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.575s" dur="0.1s" values="0;2" />
+                </circle>
+                <circle cx="16" cy="9" r="0">
+                    <animate fill="freeze" attributeName="r" begin="0.625s" dur="0.1s" values="0;2" />
+                </circle>
+            </g>
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path stroke-dasharray="12" stroke-dashoffset="12" d="M12 21h2.5c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-2.25M12 21h-2.5c-0.5 0 -0.85 -0.5 -0.85 -1c0 -0.5 1.1 -4 1.1 -4h2.25">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.15s" values="12;0" />
+                </path>
+                <path stroke-dasharray="28" stroke-dashoffset="28" d="M12 13h8c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9M12 13h-8c-0.55 0 -1 -0.45 -1 -1c0 -4.97 4.03 -9 9 -9">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.15s" dur="0.3s" values="28;0" />
+                </path>
+            </g>
+        </svg>
+
+        <svg class="chopped" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <mask id="lineMdMushroomOffFilled0">
+                <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path fill="#fff" fill-opacity="0" stroke="none" d="M20 13c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9c-4.97 0 -9 4.03 -9 9c0 0.55 0.45 1 1 1ZM14.5 21c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-4.5c0 0 -1.1 3.5 -1.1 4c0 0.5 0.35 1 0.85 1Z">
+                        <animate fill="freeze" attributeName="fill-opacity" begin="0.45s" dur="0.25s" values="0;1" />
+                    </path>
+                    <path stroke-dasharray="12" stroke-dashoffset="12" d="M12 21h2.5c0.5 0 0.85 -0.5 0.85 -1c0 -0.5 -1.1 -4 -1.1 -4h-2.25M12 21h-2.5c-0.5 0 -0.85 -0.5 -0.85 -1c0 -0.5 1.1 -4 1.1 -4h2.25">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.15s" values="12;0" />
+                    </path>
+                    <path stroke-dasharray="28" stroke-dashoffset="28" d="M12 13h8c0.55 0 1 -0.45 1 -1c0 -4.97 -4.03 -9 -9 -9M12 13h-8c-0.55 0 -1 -0.45 -1 -1c0 -4.97 4.03 -9 9 -9">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.15s" dur="0.3s" values="28;0" />
+                    </path>
+                    <circle cx="11" cy="5" r="0" fill="#000" stroke="none">
+                        <animate fill="freeze" attributeName="r" begin="0.7s" dur="0.1s" values="0;2" />
+                    </circle>
+                    <circle cx="6" cy="9" r="0" fill="#000" stroke="none">
+                        <animate fill="freeze" attributeName="r" begin="0.75s" dur="0.1s" values="0;2" />
+                    </circle>
+                    <circle cx="16" cy="9" r="0" fill="#000" stroke="none">
+                        <animate fill="freeze" attributeName="r" begin="0.8s" dur="0.1s" values="0;2" />
+                    </circle>
+                    <path stroke="#000" stroke-dasharray="28" stroke-dashoffset="28" d="M-1 11h26" transform="rotate(45 12 12)">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.85s" dur="0.2s" values="28;0" />
+                    </path>
+                    <path stroke-dasharray="28" stroke-dashoffset="28" d="M-1 13h26" transform="rotate(45 12 12)">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.85s" dur="0.2s" values="28;0" />
+                    </path>
+                </g>
+            </mask>
+            <rect width="24" height="24" fill="currentColor" mask="url(#lineMdMushroomOffFilled0)" />
+        </svg>
+
+        <svg class="add-btn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path stroke-dasharray="64" stroke-dashoffset="64" d="M3 12c0 -4.97 4.03 -9 9 -9c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9Z">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="64;0" />
+                </path>
+                <path stroke-dasharray="12" stroke-dashoffset="12" d="M7 12h10">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.1s" values="12;0" />
+                </path>
+                <path stroke-dasharray="12" stroke-dashoffset="12" d="M12 7v10">
+                    <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.1s" values="12;0" />
+                </path>
+            </g>
+        </svg>
+    </template>
+
+    <script>
+        const add = (name) => {
+            const div = document.createElement('div')
+            div.innerHTML = document.querySelector(`section .${name}`).outerHTML
+            const addBtn = document.querySelector('div .add-btn')?.parentNode
+            document.body.insertBefore(div, addBtn)
+            return div
+        }
+
+        const chop = async () => {
+            for (el of document.querySelectorAll('div .stand-by')) {
+                el.parentNode.innerHTML = document.querySelector('section .chopped').outerHTML
+                await new Promise((r) => setTimeout(r, 200))
+            }
+        }
+
+        const init = async () => {
+            Array.from(document.querySelectorAll('body>svg'))
+                .forEach((svg) => { svg.remove() })
+            add('stand-by').onclick = chop
+            await new Promise((r) => setTimeout(r, 200))
+            add('stand-by').onclick = chop
+            await new Promise((r) => setTimeout(r, 200))
+            add('add-btn').onclick = () => { add('stand-by').onclick = chop }
+        }
+        init();
+    </script>
+</body>
+
+</html>
