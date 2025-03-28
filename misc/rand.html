@@ -2,6 +2,10 @@
 
 <head>
     <style>
+        * {
+            user-select: none;
+        }
+
         body {
             display: flex;
             justify-content: center;
@@ -19,20 +23,17 @@
             animation: gelatine 0.5s;
             width: 18rem;
             height: 18rem;
-            color: #f1f1e6;
+            color: #9fadbd;
         }
 
         #btn svg {
+            color: #f1f1e6;
             width: 9rem;
             height: 9rem;
         }
 
         #container {
             text-align: center;
-        }
-
-        .raw svg {
-            color: #9fadbd;
         }
 
         @keyframes gelatine {
@@ -181,22 +182,20 @@
     <script defer>
         let count
 
-        const add = (name) => {
+        const addMushroom = () => {
             const span = document.createElement('span')
-            span.innerHTML = document.getElementById(name).innerHTML
-            span.classList.add(name)
-            const addBtn = document.querySelector('.add-btn')
-            document.getElementById('container').insertBefore(span, addBtn)
-            return span
+            span.innerHTML = document.getElementById('raw').innerHTML
+            span.classList.add('raw')
+            span.onclick = chop
+            document.getElementById('container').appendChild(span)
+            count++
         }
 
         const chop = async () => {
-            document.querySelector('.add-btn')?.remove()
-            document.querySelector('.reset-btn')?.remove()
-            add('reset-btn').onclick = init
+            document.getElementById('btn').innerHTML = document.getElementById('reset-btn').innerHTML
+            document.getElementById('btn').onclick = init
 
             const randVal = Math.floor(Math.random() * count)
-
             for (let i = 0; i < count; i++) {
                 document.querySelectorAll('span')[i].innerHTML = document.getElementById(
                     i > randVal ? 'chopped' : 'survived'
@@ -206,18 +205,15 @@
         }
 
         const init = async () => {
-            count = 2
+            count = 0
             Array.from(document.querySelectorAll('span'))
                 .forEach((svg) => { svg.remove() })
-            add('raw').onclick = chop
+            addMushroom()
             await new Promise((r) => setTimeout(r, 200))
-            add('raw').onclick = chop
+            addMushroom()
             await new Promise((r) => setTimeout(r, 200))
             document.getElementById('btn').innerHTML = document.getElementById('add-btn').innerHTML
-            document.getElementById('btn').onclick = () => {
-                add('raw').onclick = chop
-                count++
-            }
+            document.getElementById('btn').onclick = addMushroom
         }
 
         init()
