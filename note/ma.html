@@ -56,11 +56,21 @@
     document.getElementById('kkey').focus()
     function generatePassword() {
       const length = 12
-      const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+      const lowercase = 'abcdefghijklmnopqrstuvwxyz'
+      const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      const digits = '0123456789'
+      const allChars = lowercase + uppercase + digits
+
       let retVal = ''
-      for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n))
+      retVal += lowercase.charAt(Math.floor(Math.random() * lowercase.length))
+      retVal += uppercase.charAt(Math.floor(Math.random() * uppercase.length))
+      retVal += digits.charAt(Math.floor(Math.random() * digits.length))
+
+      for (let i = 4, n = allChars.length; i < length; ++i) {
+        retVal += allChars.charAt(Math.floor(Math.random() * n))
       }
+
+      retVal = retVal.split('').sort(() => Math.random() - 0.5).join('') // Shuffle the password
       document.getElementById('genPw').innerText = retVal
     }
   </script>
