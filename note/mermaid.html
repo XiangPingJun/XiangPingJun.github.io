@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant-TW">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,8 +9,8 @@
     :root {
       color-scheme: light dark;
     }
-    html, body, #app { height: 100%; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial, sans-serif; }
+    html, body, #app { height: 100%; margin: 0; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial, sans-serif; }
     #app { position: fixed; inset: 0; }
     /* Full-page text area */
     #src {
@@ -27,7 +27,15 @@
       color: inherit;
     }
     /* Rendered graph container */
-    #graph-host { width: 100%; height: 100%; overflow: auto; }
+    #graph-host {
+      width: 100%;
+      height: 100%;
+    }
+    #graph-host svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
     /* Error message style */
     .error { height: 100%; display: grid; place-items: center; text-align: left; padding: 24px; }
     .error-inner { max-width: 900px; }
@@ -48,7 +56,12 @@
   <script>
     // Theme: follow system dark/light mode
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: prefersDark ? 'dark' : 'default' });
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: prefersDark ? 'dark' : 'default',
+      useMaxWidth: true
+    });
 
     async function renderMermaid(code) {
       const app = document.getElementById('app');
@@ -60,11 +73,22 @@
         const { svg, bindFunctions } = await mermaid.render('m_' + Date.now(), code);
         host.innerHTML = svg;
         if (bindFunctions) bindFunctions(host);
+        makeFullScreen(host);
         addReset();
       } catch (err) {
         app.innerHTML = '<div class="error"><div class="error-inner">\n          <h2>Render Failed</h2>\n          <p>Please check if the Mermaid syntax is valid.</p>\n          <pre>' + (err && (err.message || String(err))) + '</pre>\n          <button id="retry">Restart</button>\n        </div></div>';
         document.getElementById('retry').onclick = reset;
       }
+    }
+
+    function makeFullScreen(host) {
+      const svgEl = host.querySelector('svg');
+      if (!svgEl) return;
+      svgEl.removeAttribute('width');
+      svgEl.removeAttribute('height');
+      svgEl.style.width = '100%';
+      svgEl.style.height = '100%';
+      svgEl.style.display = 'block';
     }
 
     function addReset() {
@@ -75,7 +99,35 @@
       document.body.appendChild(btn);
     }
 
-    function reset() { location.reload(); }
+    function reset() {
+      const app = document.getElementById('app');
+      app.innerHTML = '';
+      const textarea = document.createElement('textarea');
+      textarea.id = 'src';
+      textarea.spellcheck = false;
+      textarea.placeholder = "Paste mermaid source code here. It will render automatically and remove the text area.\n\nExample:\n\nflowchart TD\n  A[Start] --> B{Condition?}\n  B -- Yes --> C[Process]\n  B -- No --> D[End]";
+      textarea.style.width = '100vw';
+      textarea.style.height = '100vh';
+      textarea.style.boxSizing = 'border-box';
+      textarea.style.padding = '24px';
+      textarea.style.margin = '0';
+      textarea.style.border = '0';
+      textarea.style.outline = 'none';
+      textarea.style.resize = 'none';
+      textarea.style.font = '16px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, \"Liberation Mono\", monospace';
+      textarea.style.background = 'transparent';
+      textarea.style.color = 'inherit';
+      app.appendChild(textarea);
+
+      textarea.focus();
+      textarea.addEventListener('paste', async (e) => {
+        const text = (e.clipboardData || window.clipboardData)?.getData('text');
+        if (text && text.trim()) {
+          e.preventDefault();
+          await renderMermaid(text);
+        }
+      });
+    }
 
     // Shortcut key R to restart
     document.addEventListener('keydown', (e) => {
