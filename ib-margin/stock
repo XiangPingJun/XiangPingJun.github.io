@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <script src="https://unpkg.com/vue@2.6.12"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyCQbSH8tz42e9YLB7-8ix_K7ruHNJzpU3o",
+      authDomain: "ib-margin.firebaseapp.com",
+      databaseURL: "https://ib-margin-default-rtdb.firebaseio.com/",
+      storageBucket: "ib-margin.appspot.com",
+      messagingSenderId: "851154069561",
+    })
+  </script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  <title>IB Margin Call Calculator</title>
+</head>
+
+<body>
+  <div id="app" class="p-2" v-cloak>
+    <div class="container mb-2">
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現金:</pre>
+          <input v-model.number="currCash" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">轉入:</pre>
+          <input v-model.number="remit" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">保證金率:</pre>
+          <input v-model.number="marginRate" type="number" step="0.01" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">持倉:</pre>
+          <input v-model.number="volumeA" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">風險:</pre>
+          <input v-model.number="riskPriceA" type="number" step="1" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">均價:</pre>
+          <input v-model.number="averageCostA" type="number" step="1" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買股:</pre>
+          <input v-model.number="buyVolume" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現價:</pre>
+          <input v-model.number="buyPrice" type="number" step="1" class="form-input">
+        </div>
+      </div>
+
+      <div class="columns mt-2">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣股:</pre>
+          <input v-model.number="sellVolume" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現價:</pre>
+          <input v-model.number="sellPrice" type="number" class="form-input">
+        </div>
+      </div>
+    </div>
+    <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
+      <span class="mr-1">
+        *保證金${{margin}} *差值${{elv - margin}}
+      </span>
+      <span v-if="elv - margin < 0">
+        *強平後{{liquidated.lVolumeA}}股 *漲回後價值${{liquidated.lCash + liquidated.lVolumeA * averageCostA}}
+      </span>
+    </h5>
+    <h5 v-else class="text-warning">
+      *請填妥欄位
+    </h5>
+
+  </div>
+
+  <script>
+    firebase.database().ref('/data').once('value').then((snap) => {
+      new Vue({
+        el: '#app',
+        data() {
+          return snap.val()
+        },
+        mounted() {
+          document.addEventListener("visibilitychange", () => firebase.database().ref('/data').once('value')
+            .then((snap) => {
+              const val = snap.val()
+              for (const attr in val) {
+                this[attr] = val[attr]
+              }
+            }))
+        },
+        computed: {
+          cash() {
+            return this.currCash + (this.remit || 0)
+          },
+          stockValue() {
+            const riskPriceA = eval(this.riskPriceA) || 0
+            const volumeA = this.volumeA || 0
+            const sellVolume = this.sellVolume || 0
+            return riskPriceA * (volumeA - sellVolume) + riskPriceA * this.buyVolume
+          },
+          elv() {
+            const buyPrice = this.buyPrice || 0
+            const buyVolume = this.buyVolume || 0
+            const sellPrice = this.sellPrice || 0
+            const sellVolume = this.sellVolume || 0
+            return Math.floor(this.cash + this.stockValue - buyPrice * buyVolume + sellPrice * sellVolume)
+          },
+          margin() {
+            const marginRate = eval(this.marginRate) || 0
+            return Math.floor(this.stockValue * marginRate)
+          },
+          liquidated() {
+		    const sellPrice = this.sellPrice || 0
+            const sellVolume = this.sellVolume || 0
+            let lVolumeA = this.volumeA - sellVolume
+            let lCash = this.cash + sellPrice * sellVolume
+            let j = 0
+            for (i = Math.max(this.riskPriceA * 2, 0); i >= this.riskPriceA; i--) {
+              let stockValue = i * lVolumeA
+              let elv = lCash + stockValue
+              let margin = stockValue * this.marginRate
+              while (elv < margin && lVolumeA > 0) {
+                lVolumeA--
+                lCash += i
+                stockValue = i * lVolumeA
+                elv = lCash + stockValue
+                margin = stockValue * this.marginRate
+                j++
+              }
+            }
+            return { lVolumeA, lCash }
+          }
+        },
+        methods: {
+          eval(str) {
+            return eval(str)
+          }
+        },
+        watch: {
+          $data: {
+            handler: function (data) {
+              firebase.database().ref('/data').set(data)
+            },
+            deep: true
+          }
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
