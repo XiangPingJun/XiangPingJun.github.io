@@ -1,152 +1,188 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mermaid Quick Paste Renderer</title>
+  <title>Mermaid 剪貼簿渲染器</title>
+  <!-- Mermaid：用於將 mermaid 原始碼轉成 SVG -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
-    :root {
-      color-scheme: light dark;
-    }
-    html, body, #app { height: 100%; margin: 0; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial, sans-serif; }
-    #app { position: fixed; inset: 0; }
-    /* Full-page text area */
-    #src {
-      width: 100vw;
-      height: 100vh;
-      box-sizing: border-box;
-      padding: 24px;
+    :root { --btn-size: 44px; }
+    html, body { height: 100%; }
+    body {
       margin: 0;
-      border: 0;
-      outline: none;
-      resize: none;
-      font: 16px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      background: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Hiragino Sans", "Microsoft JhengHei", Arial, sans-serif;
+      background: Canvas;
+      color: CanvasText;
+    }
+    #app {
+      min-height: 100%;
+      box-sizing: border-box;
+      padding: 72px 16px 24px;
+      display: grid;
+      place-items: start center;
+      gap: 16px;
+    }
+    #readBtn {
+      position: fixed;
+      top: 12px; right: 12px;
+      height: var(--btn-size); min-width: var(--btn-size);
+      border: 0; border-radius: 10px;
+      padding: 0 14px;
+      background: ButtonFace; color: ButtonText;
+      box-shadow: 0 1px 4px rgba(0,0,0,.15);
+      cursor: pointer; font-size: 14px;
+    }
+    #readBtn:active { transform: translateY(1px); }
+    #status {
+      font-size: 12px; opacity: .75; text-align: center;
+    }
+    #figure {
+      width: min(1100px, 100%);
+      overflow: auto;
+      background: color-mix(in hsl, Canvas, CanvasText 2%);
+      border: 1px solid color-mix(in hsl, CanvasText, transparent 85%);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    #fallback {
+      width: min(1100px, 100%);
+      display: none; /* 只有權限被拒時才顯示 */
+      border: 1px dashed color-mix(in hsl, CanvasText, transparent 70%);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    #codeBox {
+      width: 100%; height: 220px; resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 13px; line-height: 1.5;
+      border: 1px solid color-mix(in hsl, CanvasText, transparent 80%);
+      border-radius: 8px; padding: 10px;
+      background: color-mix(in hsl, Canvas, CanvasText 2%);
       color: inherit;
     }
-    /* Rendered graph container */
-    #graph-host {
-      width: 100%;
-      height: 100%;
-    }
-    #graph-host svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    /* Error message style */
-    .error { height: 100%; display: grid; place-items: center; text-align: left; padding: 24px; }
-    .error-inner { max-width: 900px; }
-    .error pre { white-space: pre-wrap; word-break: break-word; }
-    /* Reset button */
-    #reset {
-      position: fixed; top: 16px; right: 16px;
-      padding: 8px 12px; border-radius: 12px; border: 1px solid currentColor;
-      background: transparent; cursor: pointer; font: inherit;
+    #pasteRenderBtn {
+      margin-top: 8px;
+      height: 36px; padding: 0 12px;
+      border: 0; border-radius: 8px;
+      background: ButtonFace; color: ButtonText; cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div id="app">
-    <textarea id="src" spellcheck="false" placeholder="Paste mermaid source code here. It will render automatically and remove the text area.&#10;&#10;Example:&#10;&#10;flowchart TD&#10;  A[Start] --> B{Condition?}&#10;  B -- Yes --> C[Process]&#10;  B -- No --> D[End]"></textarea>
-  </div>
+  <button id="readBtn" title="從剪貼簿讀取 Mermaid 並渲染">讀取剪貼簿</button>
+
+  <main id="app">
+    <div id="figure" aria-live="polite">
+      <div id="placeholder">
+        <p>提示：點右上角「讀取剪貼簿」。剪貼簿內容需為 Mermaid 原始碼，例如：</p>
+        <pre style="white-space:pre-wrap;margin:0;padding:8px;border-radius:8px;background:color-mix(in hsl, Canvas, CanvasText 4%);">
+flowchart TD
+  A[開始] --> B{條件?}
+  B -- 是 --> C[處理 X]
+  B -- 否 --> D[處理 Y]
+  C --> E[結束]
+  D --> E[結束]</pre>
+      </div>
+    </div>
+
+    <section id="fallback" aria-label="無法讀取剪貼簿時的手動貼上區">
+      <p style="margin:0 0 8px 0;">權限被拒或不支援剪貼簿讀取。請手動貼上 Mermaid 原始碼後點「渲染」。</p>
+      <textarea id="codeBox" placeholder="在此貼上 Mermaid 原始碼"></textarea>
+      <div><button id="pasteRenderBtn">渲染貼上的 Mermaid</button></div>
+    </section>
+
+    <div id="status"></div>
+  </main>
 
   <script>
-    // Theme: follow system dark/light mode
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'strict',
-      theme: prefersDark ? 'dark' : 'default',
-      useMaxWidth: true
-    });
-
-    async function renderMermaid(code) {
-      const app = document.getElementById('app');
-      app.innerHTML = '';
-      const host = document.createElement('div');
-      host.id = 'graph-host';
-      app.appendChild(host);
-      try {
-        const { svg, bindFunctions } = await mermaid.render('m_' + Date.now(), code);
-        host.innerHTML = svg;
-        if (bindFunctions) bindFunctions(host);
-        makeFullScreen(host);
-        addReset();
-      } catch (err) {
-        app.innerHTML = '<div class="error"><div class="error-inner">\n          <h2>Render Failed</h2>\n          <p>Please check if the Mermaid syntax is valid.</p>\n          <pre>' + (err && (err.message || String(err))) + '</pre>\n          <button id="retry">Restart</button>\n        </div></div>';
-        document.getElementById('retry').onclick = reset;
-      }
-    }
-
-    function makeFullScreen(host) {
-      const svgEl = host.querySelector('svg');
-      if (!svgEl) return;
-      svgEl.removeAttribute('width');
-      svgEl.removeAttribute('height');
-      svgEl.style.width = '100%';
-      svgEl.style.height = '100%';
-      svgEl.style.display = 'block';
-    }
-
-    function addReset() {
-      const btn = document.createElement('button');
-      btn.textContent = 'Restart (R)';
-      btn.id = 'reset';
-      btn.addEventListener('click', reset);
-      document.body.appendChild(btn);
-    }
-
-    function reset() {
-      const app = document.getElementById('app');
-      app.innerHTML = '';
-      const textarea = document.createElement('textarea');
-      textarea.id = 'src';
-      textarea.spellcheck = false;
-      textarea.placeholder = "Paste mermaid source code here. It will render automatically and remove the text area.\n\nExample:\n\nflowchart TD\n  A[Start] --> B{Condition?}\n  B -- Yes --> C[Process]\n  B -- No --> D[End]";
-      textarea.style.width = '100vw';
-      textarea.style.height = '100vh';
-      textarea.style.boxSizing = 'border-box';
-      textarea.style.padding = '24px';
-      textarea.style.margin = '0';
-      textarea.style.border = '0';
-      textarea.style.outline = 'none';
-      textarea.style.resize = 'none';
-      textarea.style.font = '16px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, \"Liberation Mono\", monospace';
-      textarea.style.background = 'transparent';
-      textarea.style.color = 'inherit';
-      app.appendChild(textarea);
-
-      textarea.focus();
-      textarea.addEventListener('paste', async (e) => {
-        const text = (e.clipboardData || window.clipboardData)?.getData('text');
-        if (text && text.trim()) {
-          e.preventDefault();
-          await renderMermaid(text);
-        }
+    // 依系統深淺色主題設定 Mermaid 主題
+    function applyMermaidTheme() {
+      const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: dark ? 'dark' : 'default',
+        fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC","Hiragino Sans","Microsoft JhengHei",Arial,sans-serif'
       });
     }
+    applyMermaidTheme();
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyMermaidTheme);
+    }
 
-    // Shortcut key R to restart
-    document.addEventListener('keydown', (e) => {
-      if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key && e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        reset();
+    const readBtn = document.getElementById('readBtn');
+    const figure = document.getElementById('figure');
+    const placeholder = document.getElementById('placeholder');
+    const statusEl = document.getElementById('status');
+    const fallback = document.getElementById('fallback');
+    const codeBox = document.getElementById('codeBox');
+    const pasteRenderBtn = document.getElementById('pasteRenderBtn');
+
+    function setStatus(msg) {
+      statusEl.textContent = msg || '';
+    }
+
+    function extractMermaid(raw) {
+      // 去除 ```mermaid ... ``` 或 ``` 包裹
+      if (!raw) return '';
+      let s = raw.trim();
+      const fence = /^```/;
+      if (fence.test(s)) {
+        // 移除第一行 ``` 或 ```mermaid
+        s = s.replace(/^```(?:\s*mermaid)?\s*\n?/i, '');
+        // 移除結尾 ```
+        s = s.replace(/\n?```$/i, '');
       }
-    });
+      return s.trim();
+    }
 
-    // Render only on paste
-    const ta = document.getElementById('src');
-    ta.focus();
-    ta.addEventListener('paste', async (e) => {
-      const text = (e.clipboardData || window.clipboardData)?.getData('text');
-      if (text && text.trim()) {
-        e.preventDefault();
+    async function renderMermaid(rawCode) {
+      const code = extractMermaid(rawCode);
+      if (!code) {
+        throw new Error('未取得有效的 Mermaid 原始碼');
+      }
+      // 每次渲染使用唯一 ID，避免 marker/defs 碰撞
+      const uid = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      applyMermaidTheme();
+      const { svg } = await mermaid.render(uid, code);
+      figure.innerHTML = svg;
+      placeholder?.remove();
+      setStatus('渲染完成');
+    }
+
+    async function readFromClipboard() {
+      setStatus('讀取剪貼簿中…');
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          throw new Error('此環境不支援 navigator.clipboard.readText');
+        }
+        const text = await navigator.clipboard.readText(); // 需使用者手勢且 HTTPS/localhost
+        if (!text || !text.trim()) {
+          throw new Error('剪貼簿是空的或非文字');
+        }
         await renderMermaid(text);
+      } catch (err) {
+        console.error(err);
+        setStatus((err && err.message) ? err.message : '讀取失敗');
+        // 提供手動貼上的後備路徑
+        fallback.style.display = 'block';
+      }
+    }
+
+    readBtn.addEventListener('click', readFromClipboard);
+    pasteRenderBtn.addEventListener('click', async () => {
+      try {
+        setStatus('渲染中…');
+        await renderMermaid(codeBox.value);
+      } catch (err) {
+        console.error(err);
+        setStatus((err && err.message) ? err.message : '渲染失敗');
       }
     });
   </script>
+
+  <!-- 注意：
+       1) 剪貼簿 API 需在 HTTPS 或 localhost 使用，且必須由按鈕點擊等使用者手勢觸發。
+       2) 若被瀏覽器或系統拒絕權限，頁面會顯示手動貼上的後備區塊。 -->
 </body>
 </html>
