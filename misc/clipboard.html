@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>魔術剪貼簿</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    * {
+      font-size: 1rem;
+    }
+
+    svg {
+      width: 100vw;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body onload="onload()">
+  <button onclick="readClip()" style="margin-bottom: 8px;">📋 讀取剪貼簿</button>
+  <div id="mermaid-figure"></div>
+  <div id="err-msg" style="color: red"></div>
+
+  <script>
+    let voice
+    let figure
+    let errMsg
+
+    function pronunce(word) {
+      const u = new SpeechSynthesisUtterance(word)
+      u.voice = voice
+      u.lang = 'en-US'
+      u.rate = 0.9
+      u.pitch = 1.0
+      u.volume = 1.0
+      window.speechSynthesis.speak(u)
+    }
+
+    function extractMermaid(raw) {
+      if (!raw) return '';
+      let s = raw.trim();
+      const fence = /^```/;
+      if (fence.test(s)) {
+        s = s.replace(/^```(?:\s*mermaid)?\s*\n?/i, '');
+        s = s.replace(/\n?```$/i, '');
+      }
+      return s.trim();
+    }
+
+    async function renderMermaid(rawCode) {
+      const code = extractMermaid(rawCode)
+      if (!code) {
+        errMsg.innerText = `錯誤的mermaid: ${rawCode}`
+      }
+      const uid = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
+      const { svg } = await mermaid.render(uid, code)
+      figure.innerHTML = svg
+    }
+
+    async function readClip() {
+      figure.innerHTML = ''
+      errMsg.innerText = ''
+      window.speechSynthesis.cancel()
+
+      const text = await navigator.clipboard.readText()
+      const MERMAID_REGEXP = /^(graph|flowchart|sequenceDiagram|gantt|classDiagram|erDiagram|journey|pie|gitGraph|stateDiagram(?:-v2)?|mindmap|timeline|quadrantChart|requirementDiagram|C4(?:Context|Container|Component|Dynamic|Deployment)|xychart(?:-beta)?|sankey(?:-beta)?)\b/
+
+      if (MERMAID_REGEXP.test(text)) {
+        renderMermaid(text)
+      } else if (/^[A-Z]+$/i.test(text.trim())) {
+        pronunce(text)
+      } else {
+        errMsg.innerText = `未知型態：${text}`
+      }
+    }
+
+    function onload() {
+      speechSynthesis.getVoices()
+      voice = speechSynthesis.getVoices().find(v => /^en[-_]?US$/i.test(v.lang))
+      figure = document.getElementById('mermaid-figure')
+      errMsg = document.getElementById('err-msg')
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+      })
+    }
+  </script>
+</body>
+
+</html>
