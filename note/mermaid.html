@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mermaid Quick Paste Renderer</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    html, body, #app { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial, sans-serif; }
+    #app { position: fixed; inset: 0; }
+    /* Full-page text area */
+    #src {
+      width: 100vw;
+      height: 100vh;
+      box-sizing: border-box;
+      padding: 24px;
+      margin: 0;
+      border: 0;
+      outline: none;
+      resize: none;
+      font: 16px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      background: transparent;
+      color: inherit;
+    }
+    /* Rendered graph container */
+    #graph-host { width: 100%; height: 100%; overflow: auto; }
+    /* Error message style */
+    .error { height: 100%; display: grid; place-items: center; text-align: left; padding: 24px; }
+    .error-inner { max-width: 900px; }
+    .error pre { white-space: pre-wrap; word-break: break-word; }
+    /* Reset button */
+    #reset {
+      position: fixed; top: 16px; right: 16px;
+      padding: 8px 12px; border-radius: 12px; border: 1px solid currentColor;
+      background: transparent; cursor: pointer; font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <textarea id="src" spellcheck="false" placeholder="Paste mermaid source code here. It will render automatically and remove the text area.\n\nExample:\n\nflowchart TD\n  A[Start] --> B{Condition?}\n  B -- Yes --> C[Process]\n  B -- No --> D[End]"></textarea>
+  </div>
+
+  <script>
+    // Theme: follow system dark/light mode
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: prefersDark ? 'dark' : 'default' });
+
+    async function renderMermaid(code) {
+      const app = document.getElementById('app');
+      app.innerHTML = '';
+      const host = document.createElement('div');
+      host.id = 'graph-host';
+      app.appendChild(host);
+      try {
+        const { svg, bindFunctions } = await mermaid.render('m_' + Date.now(), code);
+        host.innerHTML = svg;
+        if (bindFunctions) bindFunctions(host);
+        addReset();
+      } catch (err) {
+        app.innerHTML = '<div class="error"><div class="error-inner">\n          <h2>Render Failed</h2>\n          <p>Please check if the Mermaid syntax is valid.</p>\n          <pre>' + (err && (err.message || String(err))) + '</pre>\n          <button id="retry">Restart</button>\n        </div></div>';
+        document.getElementById('retry').onclick = reset;
+      }
+    }
+
+    function addReset() {
+      const btn = document.createElement('button');
+      btn.textContent = 'Restart (R)';
+      btn.id = 'reset';
+      btn.addEventListener('click', reset);
+      document.body.appendChild(btn);
+    }
+
+    function reset() { location.reload(); }
+
+    // Shortcut key R to restart
+    document.addEventListener('keydown', (e) => {
+      if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key && e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        reset();
+      }
+    });
+
+    // Render only on paste
+    const ta = document.getElementById('src');
+    ta.focus();
+    ta.addEventListener('paste', async (e) => {
+      const text = (e.clipboardData || window.clipboardData)?.getData('text');
+      if (text && text.trim()) {
+        e.preventDefault();
+        await renderMermaid(text);
+      }
+    });
+  </script>
+</body>
+</html>
