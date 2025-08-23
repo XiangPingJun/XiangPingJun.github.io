@@ -3,19 +3,43 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
   <script>
+    function deriveKey(passphrase, salt) {
+      return CryptoJS.PBKDF2(passphrase, salt, {
+        keySize: 256 / 32,
+        iterations: 100000
+      })
+    }
+
     function encrypt() {
-      const key = document.getElementById('kkey').value
+      const passphrase = document.getElementById('kkey').value
       const value = document.getElementById('text').value.trim()
-      let cipher = CryptoJS.AES.encrypt(value, key)
-      cipher = cipher.toString()
-      document.getElementById('text').value = cipher
+
+      const salt = CryptoJS.lib.WordArray.random(32)
+      const key = deriveKey(passphrase, salt)
+      const iv = CryptoJS.lib.WordArray.random(16)
+
+      const cipher = CryptoJS.AES.encrypt(value, key, { iv: iv }).toString()
+      const result =
+        salt.toString(CryptoJS.enc.Base64) +
+        ':' +
+        iv.toString(CryptoJS.enc.Base64) +
+        ':' +
+        cipher
+
+      document.getElementById('text').value = result
     }
 
     function decrypt() {
       try {
-        const key = document.getElementById('kkey').value
+        const passphrase = document.getElementById('kkey').value
         const value = document.getElementById('text').value.trim()
-        let decipher = CryptoJS.AES.decrypt(value || text, key)
+        const parts = value.split(':')
+        if (parts.length < 3) throw new Error('Invalid ciphertext')
+        const salt = CryptoJS.enc.Base64.parse(parts[0])
+        const iv = CryptoJS.enc.Base64.parse(parts[1])
+        const ciphertext = parts.slice(2).join(':')
+
+        let decipher = CryptoJS.AES.decrypt(ciphertext, deriveKey(passphrase, salt), { iv: iv })
         decipher = decipher.toString(CryptoJS.enc.Utf8)
         document.getElementById('text').value = decipher
       } catch (err) {
