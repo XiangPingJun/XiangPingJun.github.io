@@ -35,13 +35,19 @@
 </head>
 
 <body onload="onload()">
-  <button onclick="readClip()" style="margin-bottom: 8px;">📋 讀取剪貼簿</button>
+  <div style="display: flex; align-items: center; margin-bottom: 8px; gap: 8px;">
+    <button onclick="readClip()">📋 讀取剪貼簿</button>
+    <button id="flip-mermaid-direction" onclick="flipMermaidDirection()" style="display: none;">
+      🔄 方向變換
+    </button>
+  </div>
   <div id="mermaid-figure"></div>
   <div id="err-msg" style="color: red"></div>
 
   <script>
     let figure
     let errMsg
+    let text
 
     function pronunce(word) {
       const u = new SpeechSynthesisUtterance(word)
@@ -75,20 +81,32 @@
     }
 
     async function readClip() {
+      const flipMermaidDirection = document.getElementById('flip-mermaid-direction')
       figure.innerHTML = ''
       errMsg.innerText = ''
       window.speechSynthesis.cancel()
+      flipMermaidDirection.style.display = 'none'
 
-      const text = await navigator.clipboard.readText()
+      text = await navigator.clipboard.readText()
       const MERMAID_REGEXP = /^(graph|flowchart|sequenceDiagram|gantt|classDiagram|erDiagram|journey|pie|gitGraph|stateDiagram(?:-v2)?|mindmap|timeline|quadrantChart|requirementDiagram|C4(?:Context|Container|Component|Dynamic|Deployment)|xychart(?:-beta)?|sankey(?:-beta)?)\b/
 
       if (MERMAID_REGEXP.test(text)) {
+        flipMermaidDirection.style.display = 'block'
         renderMermaid(text)
       } else if (/^[\w\s]+$/i.test(text.trim())) {
         pronunce(text)
       } else {
         errMsg.innerText = `未知型態：${text}`
       }
+    }
+
+    function flipMermaidDirection() {
+      if (/ LR\n/.test(text)) {
+        text = text.replace(/ LR\n/, ' TD\n')
+      } else {
+        text = text.replace(/ TD\n/, ' LR\n')
+      }
+      renderMermaid(text)
     }
 
     function onload() {
