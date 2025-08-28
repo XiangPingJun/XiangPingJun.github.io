@@ -1,9 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://xiangpingjun.github.io/misc/clipboard.html -->
 <html lang="zh-Hant">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>魔術剪貼簿</title>
   <style>
     :root {
@@ -30,18 +32,543 @@
       width: 100vw;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="./魔術剪貼簿_files/mermaid.min.js.ダウンロード"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body onload="onload()">
   <div style="display: flex; align-items: center; margin-bottom: 8px; gap: 8px;">
     <button onclick="readClip()">📋 讀取剪貼簿</button>
-    <button id="flip-mermaid-direction" onclick="flipMermaidDirection()" style="display: none;">
+    <button id="flip-mermaid-direction" onclick="flipMermaidDirection()" style="display: block;">
       🔄 方向變換
     </button>
   </div>
-  <div id="mermaid-figure"></div>
+  <div id="mermaid-figure"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="0 0 696.796875 1006" style="max-width: 696.796875px;" class="flowchart" xmlns="http://www.w3.org/2000/svg" width="100%" id="mmev89hqn7yzqu">
+      <style>
+        #mmev89hqn7yzqu {
+          font-family: "trebuchet ms", verdana, arial, sans-serif;
+          font-size: 16px;
+          fill: #ccc;
+        }
+
+        @keyframes edge-animation-frame {
+          from {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        @keyframes dash {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        #mmev89hqn7yzqu .edge-animation-slow {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 50s linear infinite;
+          stroke-linecap: round;
+        }
+
+        #mmev89hqn7yzqu .edge-animation-fast {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 20s linear infinite;
+          stroke-linecap: round;
+        }
+
+        #mmev89hqn7yzqu .error-icon {
+          fill: #a44141;
+        }
+
+        #mmev89hqn7yzqu .error-text {
+          fill: #ddd;
+          stroke: #ddd;
+        }
+
+        #mmev89hqn7yzqu .edge-thickness-normal {
+          stroke-width: 1px;
+        }
+
+        #mmev89hqn7yzqu .edge-thickness-thick {
+          stroke-width: 3.5px;
+        }
+
+        #mmev89hqn7yzqu .edge-pattern-solid {
+          stroke-dasharray: 0;
+        }
+
+        #mmev89hqn7yzqu .edge-thickness-invisible {
+          stroke-width: 0;
+          fill: none;
+        }
+
+        #mmev89hqn7yzqu .edge-pattern-dashed {
+          stroke-dasharray: 3;
+        }
+
+        #mmev89hqn7yzqu .edge-pattern-dotted {
+          stroke-dasharray: 2;
+        }
+
+        #mmev89hqn7yzqu .marker {
+          fill: lightgrey;
+          stroke: lightgrey;
+        }
+
+        #mmev89hqn7yzqu .marker.cross {
+          stroke: lightgrey;
+        }
+
+        #mmev89hqn7yzqu svg {
+          font-family: "trebuchet ms", verdana, arial, sans-serif;
+          font-size: 16px;
+        }
+
+        #mmev89hqn7yzqu p {
+          margin: 0;
+        }
+
+        #mmev89hqn7yzqu .label {
+          font-family: "trebuchet ms", verdana, arial, sans-serif;
+          color: #ccc;
+        }
+
+        #mmev89hqn7yzqu .cluster-label text {
+          fill: #F9FFFE;
+        }
+
+        #mmev89hqn7yzqu .cluster-label span {
+          color: #F9FFFE;
+        }
+
+        #mmev89hqn7yzqu .cluster-label span p {
+          background-color: transparent;
+        }
+
+        #mmev89hqn7yzqu .label text,
+        #mmev89hqn7yzqu span {
+          fill: #ccc;
+          color: #ccc;
+        }
+
+        #mmev89hqn7yzqu .node rect,
+        #mmev89hqn7yzqu .node circle,
+        #mmev89hqn7yzqu .node ellipse,
+        #mmev89hqn7yzqu .node polygon,
+        #mmev89hqn7yzqu .node path {
+          fill: #1f2020;
+          stroke: #ccc;
+          stroke-width: 1px;
+        }
+
+        #mmev89hqn7yzqu .rough-node .label text,
+        #mmev89hqn7yzqu .node .label text,
+        #mmev89hqn7yzqu .image-shape .label,
+        #mmev89hqn7yzqu .icon-shape .label {
+          text-anchor: middle;
+        }
+
+        #mmev89hqn7yzqu .node .katex path {
+          fill: #000;
+          stroke: #000;
+          stroke-width: 1px;
+        }
+
+        #mmev89hqn7yzqu .rough-node .label,
+        #mmev89hqn7yzqu .node .label,
+        #mmev89hqn7yzqu .image-shape .label,
+        #mmev89hqn7yzqu .icon-shape .label {
+          text-align: center;
+        }
+
+        #mmev89hqn7yzqu .node.clickable {
+          cursor: pointer;
+        }
+
+        #mmev89hqn7yzqu .root .anchor path {
+          fill: lightgrey !important;
+          stroke-width: 0;
+          stroke: lightgrey;
+        }
+
+        #mmev89hqn7yzqu .arrowheadPath {
+          fill: lightgrey;
+        }
+
+        #mmev89hqn7yzqu .edgePath .path {
+          stroke: lightgrey;
+          stroke-width: 2.0px;
+        }
+
+        #mmev89hqn7yzqu .flowchart-link {
+          stroke: lightgrey;
+          fill: none;
+        }
+
+        #mmev89hqn7yzqu .edgeLabel {
+          background-color: hsl(0, 0%, 34.4117647059%);
+          text-align: center;
+        }
+
+        #mmev89hqn7yzqu .edgeLabel p {
+          background-color: hsl(0, 0%, 34.4117647059%);
+        }
+
+        #mmev89hqn7yzqu .edgeLabel rect {
+          opacity: 0.5;
+          background-color: hsl(0, 0%, 34.4117647059%);
+          fill: hsl(0, 0%, 34.4117647059%);
+        }
+
+        #mmev89hqn7yzqu .labelBkg {
+          background-color: rgba(87.75, 87.75, 87.75, 0.5);
+        }
+
+        #mmev89hqn7yzqu .cluster rect {
+          fill: hsl(180, 1.5873015873%, 28.3529411765%);
+          stroke: rgba(255, 255, 255, 0.25);
+          stroke-width: 1px;
+        }
+
+        #mmev89hqn7yzqu .cluster text {
+          fill: #F9FFFE;
+        }
+
+        #mmev89hqn7yzqu .cluster span {
+          color: #F9FFFE;
+        }
+
+        #mmev89hqn7yzqu div.mermaidTooltip {
+          position: absolute;
+          text-align: center;
+          max-width: 200px;
+          padding: 2px;
+          font-family: "trebuchet ms", verdana, arial, sans-serif;
+          font-size: 12px;
+          background: hsl(20, 1.5873015873%, 12.3529411765%);
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          border-radius: 2px;
+          pointer-events: none;
+          z-index: 100;
+        }
+
+        #mmev89hqn7yzqu .flowchartTitleText {
+          text-anchor: middle;
+          font-size: 18px;
+          fill: #ccc;
+        }
+
+        #mmev89hqn7yzqu rect.text {
+          fill: none;
+          stroke-width: 0;
+        }
+
+        #mmev89hqn7yzqu .icon-shape,
+        #mmev89hqn7yzqu .image-shape {
+          background-color: hsl(0, 0%, 34.4117647059%);
+          text-align: center;
+        }
+
+        #mmev89hqn7yzqu .icon-shape p,
+        #mmev89hqn7yzqu .image-shape p {
+          background-color: hsl(0, 0%, 34.4117647059%);
+          padding: 2px;
+        }
+
+        #mmev89hqn7yzqu .icon-shape rect,
+        #mmev89hqn7yzqu .image-shape rect {
+          opacity: 0.5;
+          background-color: hsl(0, 0%, 34.4117647059%);
+          fill: hsl(0, 0%, 34.4117647059%);
+        }
+
+        #mmev89hqn7yzqu .label-icon {
+          display: inline-block;
+          height: 1em;
+          overflow: visible;
+          vertical-align: -0.125em;
+        }
+
+        #mmev89hqn7yzqu .node .label-icon path {
+          fill: currentColor;
+          stroke: revert;
+          stroke-width: revert;
+        }
+
+        #mmev89hqn7yzqu :root {
+          --mermaid-font-family: "trebuchet ms", verdana, arial, sans-serif;
+        }
+      </style>
+      <g>
+        <marker orient="auto" markerHeight="8" markerWidth="8" markerUnits="userSpaceOnUse" refY="5" refX="5" viewBox="0 0 10 10" class="marker flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-pointEnd">
+          <path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path>
+        </marker>
+        <marker orient="auto" markerHeight="8" markerWidth="8" markerUnits="userSpaceOnUse" refY="5" refX="4.5" viewBox="0 0 10 10" class="marker flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-pointStart">
+          <path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path>
+        </marker>
+        <marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-circleEnd">
+          <circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle>
+        </marker>
+        <marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-circleStart">
+          <circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle>
+        </marker>
+        <marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-crossEnd">
+          <path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path>
+        </marker>
+        <marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart-v2" id="mmev89hqn7yzqu_flowchart-v2-crossStart">
+          <path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path>
+        </marker>
+        <g class="root">
+          <g class="clusters"></g>
+          <g class="edgePaths">
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_A_B_0" d="M132.019,476L152.183,437.167C172.346,398.333,212.673,320.667,236.337,281.833C260,243,267,243,270.5,243L274,243"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_A_C_0" d="M132.019,530L152.183,568.833C172.346,607.667,212.673,685.333,236.895,724.167C261.117,763,269.234,763,273.293,763L277.352,763"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_B_B1_0" d="M349.016,216L361.341,185.833C373.667,155.667,398.318,95.333,424.68,65.167C451.042,35,479.115,35,493.151,35L507.188,35"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_B_B2_0" d="M360.048,216L370.534,203.167C381.021,190.333,401.995,164.667,419.917,151.833C437.839,139,452.708,139,460.143,139L467.578,139"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_B_B3_0" d="M397.969,243L402.135,243C406.302,243,414.635,243,426.316,243C437.997,243,453.026,243,460.54,243L468.055,243"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_B_B4_0" d="M360.048,270L370.534,282.833C381.021,295.667,401.995,321.333,420.384,334.167C438.773,347,454.578,347,462.48,347L470.383,347"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_B_B5_0" d="M349.016,270L361.341,300.167C373.667,330.333,398.318,390.667,414.143,420.833C429.969,451,436.969,451,440.469,451L443.969,451"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_C_C1_0" d="M349.016,736L361.341,705.833C373.667,675.667,398.318,615.333,419.068,585.167C439.818,555,456.667,555,465.091,555L473.516,555"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_C_C2_0" d="M360.048,736L370.534,723.167C381.021,710.333,401.995,684.667,419.218,671.833C436.44,659,449.911,659,456.647,659L463.383,659"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_C_C3_0" d="M394.617,763L399.342,763C404.068,763,413.518,763,422.052,763C430.586,763,438.203,763,442.012,763L445.82,763"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_C_C4_0" d="M360.048,790L370.534,802.833C381.021,815.667,401.995,841.333,420.384,854.167C438.773,867,454.578,867,462.48,867L470.383,867"></path>
+            <path marker-end="url(#mmev89hqn7yzqu_flowchart-v2-pointEnd)" style="" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" id="L_C_C5_0" d="M349.016,790L361.341,820.167C373.667,850.333,398.318,910.667,416.934,940.833C435.549,971,448.13,971,454.421,971L460.711,971"></path>
+          </g>
+          <g class="edgeLabels">
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g class="edgeLabel">
+              <g transform="translate(0, 0)" class="label">
+                <foreignobject height="0" width="0">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" class="labelBkg" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div>
+                </foreignobject>
+              </g>
+            </g>
+          </g>
+          <g class="nodes">
+            <g transform="translate(118, 503)" id="flowchart-A-0" class="node default">
+              <rect height="54" width="220" y="-27" x="-110" style="" class="basic label-container"></rect>
+              <g transform="translate(-80, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="160">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>對稱式區塊加密演算法</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(337.984375, 243)" id="flowchart-B-1" class="node default">
+              <rect height="54" width="119.96875" y="-27" x="-59.984375" style="" class="basic label-container"></rect>
+              <g transform="translate(-29.984375, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="59.96875">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>Blowfish</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(337.984375, 763)" id="flowchart-C-3" class="node default">
+              <rect height="54" width="113.265625" y="-27" x="-56.6328125" style="" class="basic label-container"></rect>
+              <g transform="translate(-26.6328125, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="53.265625">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>Twofish</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 35)" id="flowchart-B1-5" class="node default">
+              <rect height="54" width="114.390625" y="-27" x="-57.1953125" style="" class="basic label-container"></rect>
+              <g transform="translate(-27.1953125, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="54.390625">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>1993 年</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 139)" id="flowchart-B2-7" class="node default">
+              <rect height="54" width="193.609375" y="-27" x="-96.8046875" style="" class="basic label-container"></rect>
+              <g transform="translate(-66.8046875, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="133.609375">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>區塊大小：64 位元</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 243)" id="flowchart-B3-9" class="node default">
+              <rect height="54" width="192.65625" y="-27" x="-96.328125" style="" class="basic label-container"></rect>
+              <g transform="translate(-66.328125, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="132.65625">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>金鑰：32–448 位元</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 347)" id="flowchart-B4-11" class="node default">
+              <rect height="54" width="188" y="-27" x="-94" style="" class="basic label-container"></rect>
+              <g transform="translate(-64, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="128">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>優點：免費、彈性</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 451)" id="flowchart-B5-13" class="node default">
+              <rect height="54" width="240.828125" y="-27" x="-120.4140625" style="" class="basic label-container"></rect>
+              <g transform="translate(-90.4140625, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="180.828125">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>缺點：區塊過小 不再安全</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 555)" id="flowchart-C1-15" class="node default">
+              <rect height="54" width="181.734375" y="-27" x="-90.8671875" style="" class="basic label-container"></rect>
+              <g transform="translate(-60.8671875, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="121.734375">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>1998 年 AES 候選</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 659)" id="flowchart-C2-17" class="node default">
+              <rect height="54" width="202" y="-27" x="-101" style="" class="basic label-container"></rect>
+              <g transform="translate(-71, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="142">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>區塊大小：128 位元</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 763)" id="flowchart-C3-19" class="node default">
+              <rect height="54" width="237.125" y="-27" x="-118.5625" style="" class="basic label-container"></rect>
+              <g transform="translate(-88.5625, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="177.125">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>金鑰：128/192/256 位元</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 867)" id="flowchart-C4-21" class="node default">
+              <rect height="54" width="188" y="-27" x="-94" style="" class="basic label-container"></rect>
+              <g transform="translate(-64, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="128">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>優點：現代仍安全</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+            <g transform="translate(568.3828125, 971)" id="flowchart-C5-23" class="node default">
+              <rect height="54" width="207.34375" y="-27" x="-103.671875" style="" class="basic label-container"></rect>
+              <g transform="translate(-73.671875, -12)" style="" class="label">
+                <rect></rect>
+                <foreignobject height="24" width="147.34375">
+                  <div style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">
+                      <p>缺點：不如 AES 普及</p>
+                    </span></div>
+                </foreignobject>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg></div>
   <div id="err-msg" style="color: red"></div>
 
   <script>
@@ -101,10 +628,10 @@
     }
 
     function flipMermaidDirection() {
-      if (/ LR\n/.test(text)) {
-        text = text.replace(/ LR\n/, ' TD\n')
+      if (/ LR\r?\n/.test(text)) {
+        text = text.replace(/ LR\r?\n/, ' TD\n')
       } else {
-        text = text.replace(/ TD\n/, ' LR\n')
+        text = text.replace(/ TD\r?\n/, ' LR\n')
       }
       renderMermaid(text)
     }
@@ -119,6 +646,9 @@
       })
     }
   </script>
+
+
+
 </body>
 
 </html>
