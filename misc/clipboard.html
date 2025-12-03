@@ -16,6 +16,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: lightsteelblue;
     }
 
     button {
@@ -41,7 +42,7 @@
       🔄 方向變換
     </button>
   </div>
-  <div id="mermaid-figure"></div>
+  <div id="figure"></div>
   <div id="err-msg" style="color: red"></div>
 
   <script>
@@ -88,9 +89,12 @@
       flipMermaidDirection.style.display = 'none'
 
       text = await navigator.clipboard.readText()
+      const SVG_REGEXP = /^\s*<svg[\s\S]*<\/svg>\s*$/i
       const MERMAID_REGEXP = /^(graph|flowchart|sequenceDiagram|gantt|classDiagram|erDiagram|journey|pie|gitGraph|stateDiagram(?:-v2)?|mindmap|timeline|quadrantChart|requirementDiagram|C4(?:Context|Container|Component|Dynamic|Deployment)|xychart(?:-beta)?|sankey(?:-beta)?)\b/
 
-      if (MERMAID_REGEXP.test(text)) {
+      if (SVG_REGEXP.test(text)) {
+        figure.innerHTML = text
+      } else if (MERMAID_REGEXP.test(text)) {
         flipMermaidDirection.style.display = 'block'
         renderMermaid(text)
       } else if (/^[\w\s]+$/i.test(text.trim())) {
@@ -110,7 +114,7 @@
     }
 
     function onload() {
-      figure = document.getElementById('mermaid-figure')
+      figure = document.getElementById('figure')
       errMsg = document.getElementById('err-msg')
 
       mermaid.initialize({
