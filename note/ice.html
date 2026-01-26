@@ -1,0 +1,82 @@
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script>
+    function deriveKey(passphrase, salt) {
+      return CryptoJS.PBKDF2(passphrase, salt, {
+        keySize: 256 / 32,
+        iterations: 10000
+      })
+    }
+
+    function encrypt() {
+      const passphrase = document.getElementById('kkey').value
+      const value = document.getElementById('text').value.trim()
+
+      const salt = CryptoJS.lib.WordArray.random(32)
+      const key = deriveKey(passphrase, salt)
+      const iv = CryptoJS.lib.WordArray.random(16)
+
+      const cipher = CryptoJS.AES.encrypt(value, key, { iv: iv }).toString()
+      const result =
+        salt.toString(CryptoJS.enc.Base64) +
+        ':' +
+        iv.toString(CryptoJS.enc.Base64) +
+        ':' +
+        cipher
+
+      document.getElementById('text').value = result
+    }
+
+    function decrypt() {
+      try {
+        const passphrase = document.getElementById('kkey').value
+        const value = document.getElementById('text').value.trim()
+        const parts = value.split(':')
+        if (parts.length < 3) throw new Error('Invalid ciphertext')
+        const salt = CryptoJS.enc.Base64.parse(parts[0])
+        const iv = CryptoJS.enc.Base64.parse(parts[1])
+        const ciphertext = parts.slice(2).join(':')
+
+        let decipher = CryptoJS.AES.decrypt(ciphertext, deriveKey(passphrase, salt), { iv: iv })
+        decipher = decipher.toString(CryptoJS.enc.Utf8)
+        document.getElementById('text').value = decipher
+      } catch (err) {
+        document.getElementById('kkey').style.color = 'red'
+        throw err
+      }
+      document.getElementById('kkey').style.color = 'black'
+    }
+
+    const pageLoadTime = Date.now()
+    setInterval(() => {
+      if (Date.now() > pageLoadTime + 3600000) {
+        location.reload()
+      }
+    }, 60000)
+  </script>
+  <style>
+    * {
+      font-size: 16px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <input id="kkey" type="password" style="margin-top: 5px;"
+    onKeydown="javascript: if (event.keyCode===13) decrypt()" />
+  <button onclick="decrypt()">🔑</button>
+  <button onclick="encrypt()">🔒</button>
+  <div>
+    <textarea id="text" style="width: 100%; height: 90vh; margin-top: 5px;">
+      hEM8bpUb6NshU7I2fxuZ0A54A5sD+mBbP7zDi+Daigo=:8FmDjWQayngfjzmaitrd0A==:XlZbjpbXWjWHYWMEGZIP3w83vHgYIV94DrA2oGrYbAyece/nTCvHBOfi1VBL4paVcgf9zzBsLv1gxStwxnzYbBdm7lQXchHrU+kwj7zOgTDFrxWqxxNIAtxSfiByeFQeAu/VZgxJdcdz8Pkv4H+ekr5ZoWllQi7p/7wd+NuCysKF7pxBXASJq4Cyniic5DlAewJwOoVFe1KqSmF7kk9JXCRxdhwK9Zqvh0ggVxhQ8kkzk++/yKHiD+XqtH1YDoxj2kQeJAjQKs8JCuM75qFUA+2OFt/0oAVZQDYeJA//V2VNedDx7YmLb4FrtZVOd0BNW1ZQijLv3HbMpuJ6Sh1oQhPE3Qs6KgwmUChw+tSO22IluoAVdPOjEr3OLsa7SnfqswozKLgAowYwPvGbeTtKrA==
+    </textarea>
+  </div>
+
+  <script>
+    document.getElementById('kkey').focus()
+  </script>
+</body>
+
+</html>

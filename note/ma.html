@@ -1,0 +1,161 @@
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script>
+    function deriveKey(passphrase, salt) {
+      return CryptoJS.PBKDF2(passphrase, salt, {
+        keySize: 256 / 32,
+        iterations: 100000,
+        hasher: CryptoJS.algo.SHA256 // Recommended: Explicitly use SHA256
+      });
+    }
+
+    function uint8ToBase64(uint8) {
+      let binary = "";
+      const chunkSize = 0x8000; // 避免 call stack overflow
+
+      for (let i = 0; i < uint8.length; i += chunkSize) {
+        const chunk = uint8.subarray(i, i + chunkSize);
+        binary += String.fromCharCode(...chunk);
+      }
+
+      return btoa(binary);
+    }
+
+    function base64ToUint8(base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+
+      return bytes;
+    }
+
+    async function compress(str) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+
+      const cs = new CompressionStream("gzip");
+      const writer = cs.writable.getWriter();
+      writer.write(data);
+      writer.close();
+
+      const buffer = await new Response(cs.readable).arrayBuffer();
+      return uint8ToBase64(new Uint8Array(buffer));
+    }
+
+    async function encrypt() {
+      const passphrase = document.getElementById('kkey').value
+      const value = await compress(document.getElementById('text').value.trim())
+
+      const salt = CryptoJS.lib.WordArray.random(32)
+      const key = deriveKey(passphrase, salt)
+      const iv = CryptoJS.lib.WordArray.random(16)
+
+      const cipher = CryptoJS.AES.encrypt(value, key, { iv: iv }).toString()
+      const result =
+        salt.toString(CryptoJS.enc.Base64) +
+        ':' +
+        iv.toString(CryptoJS.enc.Base64) +
+        ':' +
+        cipher
+
+      document.getElementById('text').value = result
+    }
+
+    async function decompress(base64) {
+      const uint8 = base64ToUint8(base64);
+
+      const ds = new DecompressionStream("gzip");
+      const writer = ds.writable.getWriter();
+      writer.write(uint8);
+      writer.close();
+
+      const buffer = await new Response(ds.readable).arrayBuffer();
+      return new TextDecoder().decode(buffer);
+    }
+
+    async function decrypt() {
+      try {
+        document.getElementById('kkey').disabled = true
+        await new Promise((r) => setTimeout(r))
+        const passphrase = document.getElementById('kkey').value
+        const value = document.getElementById('text').value.trim()
+        const parts = value.split(':')
+        if (parts.length < 3) throw new Error('Invalid ciphertext')
+        const salt = CryptoJS.enc.Base64.parse(parts[0])
+        const iv = CryptoJS.enc.Base64.parse(parts[1])
+        const ciphertext = parts.slice(2).join(':')
+
+        let decipher = CryptoJS.AES.decrypt(ciphertext, deriveKey(passphrase, salt), { iv: iv })
+        decipher = decipher.toString(CryptoJS.enc.Utf8)
+        if (!decipher) {
+          throw new Error('Decryption failed')
+        }
+        decipher = await decompress(decipher)
+        document.getElementById('text').value = decipher
+      } catch (err) {
+        document.getElementById('kkey').style.color = 'red'
+        throw err
+      } finally {
+        document.getElementById('kkey').disabled = false
+      }
+      document.getElementById('kkey').style.color = 'black'
+    }
+
+    function generatePassword() {
+      const length = 12
+      const lowercase = 'abcdefghijklmnopqrstuvwxyz'
+      const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      const digits = '0123456789'
+      const allChars = lowercase + uppercase + digits
+
+      let retVal = ''
+      retVal += lowercase.charAt(Math.floor(Math.random() * lowercase.length))
+      retVal += uppercase.charAt(Math.floor(Math.random() * uppercase.length))
+      retVal += digits.charAt(Math.floor(Math.random() * digits.length))
+
+      for (let i = 4, n = allChars.length; i < length; ++i) {
+        retVal += allChars.charAt(Math.floor(Math.random() * n))
+      }
+
+      retVal = retVal.split('').sort(() => Math.random() - 0.5).join('') // Shuffle the password
+      document.getElementById('genPw').innerText = retVal
+    }
+
+    const pageLoadTime = Date.now()
+    setInterval(() => {
+      if (Date.now() > pageLoadTime + 3600000) {
+        location.reload()
+      }
+    }, 60000)
+
+  </script>
+  <style>
+    * {
+      font-size: 16px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <input id="kkey" type="password" style="margin-top: 5px;" onKeydown="javascript: if (event.keyCode===13) decrypt()" />
+  <button onclick="decrypt()">🔑</button>
+  <button onclick="encrypt()">🔒</button>
+  <button onclick="generatePassword()" style="margin-left: 30px;">🎲</button>
+  <span id="genPw"></span>
+  <div>
+    <textarea id="text" style="width: 100%; height: 90vh; margin-top: 5px;">
+      BJ3IkHP/czOXuqFdhHl17Hq0CY1zUagiK7BiniLL3VM=:jlfZnffFR19u5rbvGdEvkQ==:7zEXY080ooY9+zt4oMetD+7tZ/r3fCbPc9EciMmbag1IlVz9sTbplsCwEupzjoz1EpkFifudZWYQA5DExcV+mWRpmH7QMFUfoDthZccYC3OsnnGV54i5tK3VtOHXSCd6AoUrDzny6tDquDxDVUrUXHSY+4J32IdnHUuvcu3VL4+x86NvM1mNRoCysd5uLAFdylb0RmWM0nqMYOCyI3i45OixWbyNvjz8tL2SLi8T3cjLOiCZyoulukisGrwFgfAr3KtPQVyPHdov9B/njnZdtnYxuk077EhwPcd/aNhtePShSBwYJXV3b25XygaVgZmcIHrUNvs5YpqQf3SgSXaQI+SVpxoiKZ34j7yqHIh+2STcfCypwdqEg7o0aKcaX3TmUMHo92ngwbc3AVzny2BxrBNIqPE1t47+H+l0KWLpTNgo9z1DExU154D/fXETsfk1T0p9DmMxJ/WuA0FxA6AhgQbII04GHaOftX4T7bBb9EOU89fzp4ltqDsEF8vKV7/PZgyVY4+qugbOdeNisLXIarJDdmUh1WxwFZK0gnL9JBDq813ZacnrA9QyyE8g4IbqLfxLOVsSWtR4FpmUgMlUMkpBEDQLXHyG46bNRVkzmT2dWVAqfWfoJeypCaBSJUfWht8fToc1bVGT8THySc04BGTOPZ2yU9olWxdIO2YtPv5XUaaUuGXwa91VsKOZHWeLXTb4rJRfJCnS0On3StZ7jygmF//lb2zRt3M9pS0eF7bKmuZu7wkfHcs23Ue0wzQ1TfcMrooKbzxfGD3a8G/Ik+q6T+Z8WkSq3UkZXVbNFXpd/Y1cJSSJkr29XSMhfL2iWU7z2sR/pgls8xfPvISLKCWOOSP+Re4jxuNYbOYuXmRvhpyaowkfvl77jGZxInO1OmNUhyNFLlEmtnnAbcPyHanKKEXZNLEVSIoCq4rpQMiYRU785XbK3EydX3qAWZTwS+mzpuCivF+4QSgqsVb7JdrHI9rMQmMAULwbNiI2yHUoAXNAdsEDczvQivkq0ky8Ck1oxzbx7BQWhEmjaTe/1jqvxt25Y9tZ+wl//A/vG6TAc4uqneb9AsWYqQFeWcbHuqgjsrxgtwlaDrBSbLdpCEa74y54+XYRhZhFu3AiHJqCq5Oy21SBk+J2jZV/pJJZncrlyh+qIQqN7oJ2d0lhuDAsUE5A0jMKKinvD2H4nC37puDmw4/JRebvMbJvv2hdLoWR2c4ye5BRi2J41qzZrE+KZaVYwzE3BWNpitA1/7lqj461wNH/agtd+ADLNIFyIcHWsxh1CWBKZdMXDTD1GOLs3I/682uJ0byv+bOjWNDUL9jT+aCo4YKsBSWZ89g2uJYnChbIfPg4r8C6aboupgWtlLR6FYnPn9g+kRVFNtwykJYp+iUqPqe7OSuWLpFKC4SvXyZA56lTgoiSIBqGBR4uAy0M8niB8z+XrJ6/S8fqxrgAGvBXinNsTLtWMuv7jutkG2LQZ/kzSaRafwjmvsD9mDKia2TJOPhyKTrqAJ+iEtqYkWz+KV/RVhNDd4gtD3fJezdeVBxWLRfIPWhqReS1lccQ0bJ2UcwLCzW8kef+Oy+ZeEcOWuyIUmW6VCkPqQwLuijzvs1HC7gkrUHFF1FtQf+PCvq67PX4miWcoXMyqj4kV7ecLvvE00i1eF9KPaNf5KlgxwGIhJVt5CHCWxi3h1X9A/1V2I/wJ9hAnoAKmf2uk9OkGyQliR68ztGSgzl9ymAvRY394Ee2GXwZmA6unrWSFCgNMeiV7BqVK+dBXfBFJsTR3FpBViB/33ZqESz8Zs+kPNn9QT7kuGc2W541LjI5wxuaZo5+5NPHOl+W5TxnyHI3nd44TJazZVtHQGudksHivs88lFf+zDt2jtlsKO3Ahy8oGII31ouvucjiogvluB9PC3lURsJO9dAuJ6TL/McNNGnpUP7kJfE1PwDkI0MeiNn6HR1v42xSizzaxT62hWpE+jN6ZdPv2ut92DE50sPqsXnwGEKsrrwRMrpIDH0lVnYOOzE8nE2C6xsZYIlsu0OTYczqxh21VJyN5mEHde/hT0HGSQxlkHeQi2G7HsyOlJ5cXWiNRy/ML05hEbP6IqF1WOK93OWm/0U8zAPMQka6jSBtaC5YZxvv2BGcsYrHLZN8XwZrH5E/uFhHOsCgXc0CZQ+3QNfSAaq7xR9wqUf77qr4TOpSfd142KxlOw5bLpW32pzhcxgtMEzPVgUirruNGVmKzz6++NOwinMVK6DDodJdriNlQBO+aMAIFN4TXdl8gL4Hkg3P+zkLwoPjx5zNd3FLuGpMMStaiiyTSekbWaSXQLW3lvdiaP+gI18TslnY5l9ZVhHuW7uZIthFbXG8EJVtXZ78g/d0Uz86iD63/sSnZeCCtVnIPHATwJ3lc+9utio93NRgm0ls6JH4o0aEjbZiuyKr0DQF6sEAJGUHecOyJ2OBtFTGJrqe3AT9p1DdINM26RSkC6VVa3mGGGm/GpFU2bQelNNuNgRh+KUAlUyTmlEzrgI3rFl4iqaGuWlzVVc6E0Jx2IP9uh13GkgTfWLzaeeupT7cIbWvZh+JiYA4GV9Nyih5JuK1J4WvQ1+OOjurtkocoM164yiFhoTU32VEC8PYhJ1dBz4tTYI6e46zS+t3u5ECFkyz0Aoysx62PjPpnbCoP8LtARvHTX/iAPukLoAXrU3QmULY3izkaM1RqNIM0ktnNtlR1nF9xT9t8T5lyhcysYojfFh0G/y7IXe1ZIB946cviS9cPhvib4F2VywtEG+KmIawq+2rqvIORwuGLWKmDH09Vtbx9ILrY4jk8AtlXr3WgdU/AdMcWx5k7s3B9YFPowpj8nO7l08A+6JUn6yxT60motVIOZTBDyPU7cFBUSfalR6xBclxuuticSi8CMtMhdC923zBHpeihLgqRMQPjIJAbLdPxPploF3/YI34pNxinLywfidSppgYdNmcZ1w7XCcIIBup7alE1RyhyDhJLGsegjG5v138epM15TTJAmXC5j5SFSFYgiXliSj1+kYJMXO6XDrXvoDF3SKcSFrybstzjOw0L9VtXa5Fw5O9P1IqDwc7hm9EoKTK1HpaON4QCEIINuT1ysKNLqnv8lyPFLeA1PVbFvIssMseuXUZrTYfwb9+LN0ij/kYT1yGnRiGAafJajyVCWrt9EQpx41KT466cf5EV46bLqoDwEtls7vBxPoXP7xfektOmxXNCJFLjBz1SX8Xs9+NEKHe8YLnFh1q511xZXa8oQ8HODYjH7/aefA4hid8rcTrK0mEd88RCRWxuwg7QTeCmI+1Iuzlf6Yn7r03IjxeqXwX0c3jCzT77zNqMEtFTaMqBOSg/eXUrYJ2hY0V0g88gH596mvqFst5zIl0gqRx2So8ouWKISqN+T6AaydWb6QFckPB+6SwOQWTgdNoZl3WGqwbeWFbfm/SmXXz1/h0Vrag/b5C5i0pN6r+10+DvgK2MdDGufuat2oIdj90d0hlXJGTOKvosmtyCpm6/ZyykIRbtbQ3P8nE83K55LiBlaVMZAPR7SUxt2KMyzWJmmqPrJCY77D6TaKFjeRSBXrcqRH0/2Iek5rPBsAW049atT8VA+LfkPtpBcRny0c1cqGut9sPhjfCUd/vCN370BwV9tYztUFYSzRTUNoJZIZkDHgcXBnNbosScTs2rl+sCc7S+bkfLlnD0nYNFATK0IKs7qfg5Mw1f26F1K2pfy6NTDEW/ri4OfttmdrWQZXuo2sI80sbvbfcteqiKMZaACb6XYqq09c5JvsKyt0WJG7XNKKUrEz/R1CzJTEqZuE4CEnmB5Dn0bHIUBI3UH26CCZD4dy5JMvTFVyPXosOylviyD1NfSFnXplB9ZYcZw67u4HPAuhn/LFZIwb2tU/3GHygG4+cd6oYWkJEUuwysJhJP2mwfT+wyaEP5wokNiaPhiS0FkodGDQLnbjMANK0p/0bTuYn/fyL8P0ObjDF6Na7cva+9Hd9PiHVd6xAQASeo93E/m8y8YjZm+ZVonQ9Bfzw7VarsbyGYcLaudFfbxcvvGaVrmrdLAX7rM8Y0rJZlbhchqsVkT/vWUpy4Zb4XaQohmAdw0i4CrQRNh4fFMx+tk8pj9yuSiSTXZ/ibk4BpuGpHrP0NbRi22r2NdVf3hHrkPp+ImNOFA081cDlFx1jwODdwOndLhALeTbCxscjEO5ME57kL0oFpZkpR1uJVPVRYyNMpjjmFsxWeldmy2tEtk8mGQK2Q7stQp6WvJLkMB7ipntUSypgWV8FhXgXAkqHitdgSU51r7pneVJa2YB20fysKCpVu+61kLvcMx46XMHCAZ8mOJH95cWiqW8ZUif8Bp6i/3t8GfVcVUFa8eHFTWmVxk+B9H+YoB3uRzV5w7jbX1zYgquRDomh1JUvzmL81qILOIBTs9kWMWIPsSoE0/vJIvptYtrrsIeWQUwllO0czAKlOuqUnZeGFQrcJeDMeIgkexwoi2EhdCnLGs7iA0gb85o7QIDdtxK9EJY8sCDAJFqXLhBhQDB+OMogY9s+U1BwFa80XxhWtZhDU6o3uC8GQ2o/39l40FS5SKDHEZwg+4ZQpLRcED5uik0z0nwUgyZd+gZxWBGaSRGk9IQ10nNoyzKwtQSphSq2czhbVAIdiih8quv5eZfepFJes3B+AoxtY0dM8+/Z501nPBtfk6nexsYdrbWtCFbKLeDUbWkiGHhH7880z6opZq29fWteVbRVQj/gKf0ah1a9aqMCEB4J9P34I3ufSwGgxitbC+Y13amy+T92jay6FPVQIjiELp8GiVhF+yGQHGaUWimGyUVEGscx/tVf9N2Tapkh26MDwg7qXffRW0Md6I9iBF1+i4qdInA17YZPOT00/9CzrO+rpuaulIHYDqX2Cx16d892mGg9xRD0AXtwAgse1vh63YQkL2x9H98N3v7L95rWaReR2AtCOIR0V0nQS6AatAUNSk4Qn22gqSulx+qOZLHsnSvOVhwfrLwj+93PoSgy9yHUbnN7okHdKbtp5onkAPRcb4Xr7KbCe9QsluUv/cM1i/HwXmf8CC5rIjt3UPITL72zbIaTAIanraxb5gencpjq4PLseR9pUJ60d4tl1tKgNfmT2Es93QBpJjUMLYKs8YBjcFNQbnoSG9NfNxz10J3Hk1VMy+hfm1XHiFEz4qT1MH0O5awYYPaKejHju3vCr67aiLDT7Npl6OBuoRCPeUunOMRrR1wKedt+jR5WtbkR8y9KSsUftmhkEa+HrRbicZSju9TDThHkrk3PkwzUZhUtIr8hrt8TF+/7hdxx0tJdYOjHIqzmDILrxtEHecZJ+gvTwABREZp+QYMe50tjgn6qRYW8yPp13w6pZToIEsePqWo2JcFXD/Whyy042NJyeAWzDeXA/m3ORvTQDD+8gxybF7hvt3t0qM3xxd1hyywFzPu6xCOwpsUppLAlPvAOZwOsGMIKdsrNOGbuleXgxEY91IFM3+XuedQSbGZdJvUQrHCnC58Ar7+PuvxN5Pfu7MAlun+dPTVpoeLdjAEWI56zvd0+tpZi09AY7coJW32BBk3BKFyQEJqwAe54gy4d2b/U2J9aGwqtrwEsQqbgR9bG0Sg9n7MvOkc8Wm+c66JxrI/uJU/PcQ1oXzzI4YuDmvoJqoq2uf/UndpA5utJo2dyCKvdXjf1WgrZ56IXMrFURLhP/uGgU9/vRdrAgeWJgTXVDtwq6yKDwR7nvF1FO6y62IWiDGoYkn7ldLyJXHZ+OFFMyRtaGhvjUHBNXkJUZov+iooHhXzsjRKDXmtZ4b2F30CLj4rueoKZ8RLGu1fzlbAUSSqZfjeFESlucFbi8HK0ofZ7WL0+pKt+r1O/hnaKJ3JPRE6oRTlAmhM2ePcKAJE1K/kp7lKvxLcO9BxhUAm15M/du/9oCcivNK4je/fM5M5FSuPitBPsH4p3MHhkS869xgmbxVqg2qvVBmeLZNNtAYO6h4r4o0yqep3TJjTNPAJR6gCZ3BStN5rIn+3ijOMaqs5YwuKmqiaz2d/Ks/oXfM/O+kWjHA1U8bIf3pNfsxx11/3km4E5yE1Cjhohgyu5pwuqcktO0fv1vMGwUHvEKc8t04Z8pFJEgYP8VwxmakwQwDvtNrDSvwpgJy07Ykam67dI/qmDXcNAPC627qQRYKLMEU0GXb9iwOpMz72ZdlWiXYmI71JYE1k4DedUfOEtc5m5B7OllrXkrYWXwjo8w/uJzFXYd7nOB71gZDr6lP9HjWeSsFH9zVmsRaav5Q0TB+/OqvEFOYkgG+J9QSn2fSYfRmiKX5H2M8+LfTTc+W5Kew4e4OtnZtVAI/zcE2pqf8EbPvA/F2/Oe0nohBGGY/sZrAJvaesqDSkCfOVlCNFDYCKfFCpK82V1MeRKYFja0OIHtp78CD/0cTeMaplQkX6uVvtSf/vYo55tSPaRpuY0CzfCOVDNow5j56CY+4JqUu8UZTqpIDpcyOSBIgaLWFK5o74anL/IdYDH2EDC+Rx9OohML9I+qWRzmfCLY922Lq91MftGNnL6Nbwx7Bwb8AW9pDj7dff5VJ6jcXC0UUuLdws3NBPeLDDdr8S2h177/2NjxZ5QdusYh23xgBD2+OXioJtCeA6EaC9knBTUgCg+nzOEqSuf4RRR5DYhO9CSWWOmQyJTXUf0yYgw1l8a+xq2jnYM/FuAm/3WlMINIc35HKa8rrCE1I4lfuukEjlyH7IYqZFsah1/isIdNgakvujzOBgqlRuYR3rWNO4SSlqjlNYXMzs2uoktVVQHny3aaADS5XE0jNfRS0jI03/XteJH+ul6aMkH43J7eJKq/2j9fF/0H6IndmYQNP3iQGY/pw4lav8cmkHdTfCjb5rjL1sX1/BQf/dnRyGA7LbNhfmrPnFQy/yUFeUaf+4qpMdQlUc83fBtbh3zGJ94ezMek6aSMl0eSk1a/fVijUKDJDmzH5OAlKrgLHKFXOF0lEN++MuJc32THb0vrvHWmwhTgCibeLI62u9vjRBf9LZC0cBqQwxs8DGP5kJK52HkLeZOUV/tQmkv6jVPvLDjKHJ1DqA0DTCSrdi+4TFYMzo3PrlmezACdzAw44H0bHT2TXW0XSH7qI1VX3Zqbs9O42sSNDmHhZz4RmXtz9TxBAxOd8BVIpA7tObeBdYEO5xkeGP0hWaw+8CiMkzG58H+mFFRw4uGx4Aj26PtQKVIL7bLNOyt+Eq5pjdd4JL1gwXLlNciLQSqA5Ah
+    </textarea>
+  </div>
+
+  <script>
+    document.getElementById('kkey').focus()
+  </script>
+</body>
+
+</html>

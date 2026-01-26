@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>魔術剪貼簿</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 8px;
+      background-color: lightsteelblue;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    * {
+      font-size: 1rem;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body onload="onload()">
+  <div style="display: flex; align-items: center; margin-bottom: 8px; gap: 8px;">
+    <button onclick="readClip()">📋 讀取剪貼簿</button>
+    <button id="flip-mermaid-direction" onclick="flipMermaidDirection()" style="display: none;">
+      🔄 方向變換
+    </button>
+  </div>
+  <div id="figure"></div>
+  <div id="err-msg" style="color: red"></div>
+
+  <script>
+    let figure
+    let errMsg
+    let text
+
+    function pronunce(word) {
+      const u = new SpeechSynthesisUtterance(word)
+      u.voice = speechSynthesis.getVoices().reverse().find(v => /^en[-_]?US$/i.test(v.lang))
+      u.lang = 'en-US'
+      u.rate = 0.9
+      u.pitch = 1.0
+      u.volume = 1.0
+      window.speechSynthesis.speak(u)
+    }
+
+    function extractMermaid(raw) {
+      if (!raw) return '';
+      let s = raw.trim();
+      const fence = /^```/;
+      if (fence.test(s)) {
+        s = s.replace(/^```(?:\s*mermaid)?\s*\n?/i, '');
+        s = s.replace(/\n?```$/i, '');
+      }
+      return s.trim();
+    }
+
+    async function renderMermaid(rawCode) {
+      const code = extractMermaid(rawCode)
+      if (!code) {
+        errMsg.innerText = `錯誤的mermaid: ${rawCode}`
+      }
+      const uid = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)
+      const { svg } = await mermaid.render(uid, code)
+      figure.innerHTML = svg
+    }
+
+    async function readClip() {
+      const flipMermaidDirection = document.getElementById('flip-mermaid-direction')
+      figure.innerHTML = ''
+      errMsg.innerText = ''
+      window.speechSynthesis.cancel()
+      flipMermaidDirection.style.display = 'none'
+
+      text = await navigator.clipboard.readText()
+      const SVG_REGEXP = /^\s*<svg[\s\S]*<\/svg>\s*$/i
+      const MERMAID_REGEXP = /^(graph|flowchart|sequenceDiagram|gantt|classDiagram|erDiagram|journey|pie|gitGraph|stateDiagram(?:-v2)?|mindmap|timeline|quadrantChart|requirementDiagram|C4(?:Context|Container|Component|Dynamic|Deployment)|xychart(?:-beta)?|sankey(?:-beta)?)\b/
+
+      if (SVG_REGEXP.test(text)) {
+        figure.innerHTML = text
+      } else if (MERMAID_REGEXP.test(text)) {
+        flipMermaidDirection.style.display = 'block'
+        renderMermaid(text)
+      } else if (/^[\w\s]+$/i.test(text.trim())) {
+        pronunce(text)
+      } else {
+        errMsg.innerText = `未知型態：${text}`
+      }
+    }
+
+    function flipMermaidDirection() {
+      if (/ LR\r?\n/.test(text)) {
+        text = text.replace(/ LR\r?\n/, ' TD\n')
+      } else {
+        text = text.replace(/ TD\r?\n/, ' LR\n')
+      }
+      renderMermaid(text)
+    }
+
+    function onload() {
+      figure = document.getElementById('figure')
+      errMsg = document.getElementById('err-msg')
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+      })
+    }
+  </script>
+</body>
+
+</html>

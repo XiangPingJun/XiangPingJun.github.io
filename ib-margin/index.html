@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <script src="https://unpkg.com/vue@2.6.12"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyCQbSH8tz42e9YLB7-8ix_K7ruHNJzpU3o",
+      authDomain: "ib-margin.firebaseapp.com",
+      databaseURL: "https://ib-margin-default-rtdb.firebaseio.com/",
+      storageBucket: "ib-margin.appspot.com",
+      messagingSenderId: "851154069561",
+    })
+  </script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input.form-input {
+      padding: 0.25rem 0.25rem;
+    }
+  </style>
+  <title>IB Margin Call Calculator</title>
+</head>
+
+<body>
+  <div id="app" class="p-2" v-cloak>
+    <div class="container">
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">現金:</pre>
+          <input v-model.number="cash" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">轉入:</pre>
+          <input v-model.number="remit" type="number" class="form-input">
+        </div>
+      </div>
+
+      <hr />
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">持倉:</pre>
+          <input v-model.number="volumeA" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">均價:</pre>
+          <input v-model.number="averageCostA" type="number" step="any" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">風險:</pre>
+          <input v-model.number="riskPriceA" type="number" step="any" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">準備率:</pre>
+          <input v-model.number="marginRateA" type="number" step="0.01" class="form-input">
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買入:</pre>
+          <input v-model.number="buyVolumeA" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買價:</pre>
+          <input v-model.number="buyPriceA" type="number" step="any" class="form-input"
+            :class="{ 'is-error': buyVolumeA && !buyPriceA }">
+        </div>
+        <div class=" column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣出:</pre>
+          <input v-model.number="sellVolumeA" type="number" class="form-input">
+        </div>
+        <div class=" column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣價:</pre>
+          <input v-model.number="sellPriceA" type="number" step="any" class="form-input"
+            :class="{ 'is-error': sellVolumeA && !sellPriceA }">
+        </div>
+      </div>
+
+      <hr />
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">持倉:</pre>
+          <input v-model.number="volumeB" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">均價:</pre>
+          <input v-model.number="averageCostB" type="number" step="any" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">風險:</pre>
+          <input v-model.number="riskPriceB" type="number" step="any" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">準備率:</pre>
+          <input v-model.number="marginRateB" type="number" step="0.01" class="form-input">
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買入:</pre>
+          <input v-model.number="buyVolumeB" type="number" class="form-input">
+        </div>
+        <div class="column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">買價:</pre>
+          <input v-model.number="buyPriceB" type="number" step="any" class="form-input"
+            :class="{ 'is-error': buyVolumeB && !buyPriceB }">
+        </div>
+        <div class=" column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣出:</pre>
+          <input v-model.number="sellVolumeB" type="number" class="form-input">
+        </div>
+        <div class=" column col-2 d-flex">
+          <pre class="form-label m-0 mr-1">賣價:</pre>
+          <input v-model.number="sellPriceB" type="number" step="any" class="form-input"
+            :class="{ 'is-error': sellVolumeB && !sellPriceB }">
+        </div>
+      </div>
+    </div>
+    <hr />
+    <h5 v-if="elv + margin" :class="{ 'text-success': elv > margin, 'text-error': elv < margin}">
+      *資產價值${{elv}} *保證金${{margin}} *差值${{elv - margin}}
+    </h5>
+    <h5 v-else class="text-warning">
+      *請填妥欄位
+    </h5>
+    <textarea v-model="note" class="form-input" rows="8"></textarea>
+
+  </div>
+
+  <script>
+    const holdingCount = 2
+
+    const alphabets = Array.from(Array(holdingCount).keys()).map((i) => String.fromCharCode(65 + i))
+
+    const run = async () => {
+      const snapData = (await firebase.database().ref('/data').once('value')).val()
+      let newSnapData = { ...snapData }
+
+      alphabets.filter((a) => newSnapData[`volume${a}`] === undefined).map((a) => {
+        newSnapData = {
+          ...snapData,
+          [`volume${a}`]: 0,
+          [`unit${a}`]: 0,
+          [`averageCost${a}`]: 0,
+          [`riskPrice${a}`]: 0,
+          [`marginRate${a}`]: 0,
+          [`buyVolume${a}`]: 0,
+          [`buyPrice${a}`]: 0,
+          [`sellVolume${a}`]: 0,
+          [`sellPrice${a}`]: 0,
+        }
+      })
+      await firebase.database().ref('/data').set(newSnapData)
+
+      new Vue({
+        el: '#app',
+        data: () => newSnapData,
+        mounted() {
+          document.addEventListener("visibilitychange", async () => {
+            const snap = await firebase.database().ref('/data').once('value')
+            const val = snap.val()
+            for (const attr in val) {
+              this[attr] = val[attr]
+            }
+          })
+        },
+        computed: {
+          elv() {
+            let elv = this.cash + (this.remit || 0)
+            alphabets.forEach((a) => {
+              const volume = this[`volume${a}`] || 0
+              const averageCost = this[`averageCost${a}`] || 0
+              const riskPrice = this[`riskPrice${a}`] || 0
+
+              const buyPrice = this[`buyPrice${a}`] || 0
+              const buyVolume = this[`buyVolume${a}`] || 0
+              const sellPrice = this[`sellPrice${a}`] || 0
+              const sellVolume = this[`sellVolume${a}`] || 0
+
+              console.log(volume + buyVolume - sellVolume)
+
+              elv += riskPrice * (volume + buyVolume - sellVolume)
+
+              console.log(elv)
+            })
+            return Math.floor(elv)
+          },
+          margin() {
+            let margin = 0
+            alphabets.forEach((a) => {
+              const volume = this[`volume${a}`] || 0
+              const marginRate = this[`marginRate${a}`] || 0
+              const riskPrice = this[`riskPrice${a}`] || 0
+              const buyVolume = this[`buyVolume${a}`] || 0
+              const sellVolume = this[`sellVolume${a}`] || 0
+              const sellPrice = this[`sellPrice${a}`] || 0
+
+              margin += riskPrice * (volume + buyVolume - sellVolume) * marginRate
+            })
+            return Math.floor(margin)
+          },
+        },
+        watch: {
+          $data: {
+            handler: function (data) {
+              firebase.database().ref('/data').set(data)
+            },
+            deep: true
+          }
+        }
+      })
+    }
+    run()
+  </script>
+</body>
+
+</html>
