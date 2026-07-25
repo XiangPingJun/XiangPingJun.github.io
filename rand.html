@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         * {
             user-select: none;
@@ -10,7 +11,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             background-color: #2c3e50;
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -33,7 +35,22 @@
         }
 
         #container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            svg {
+                width: 42vw;
+                height: 42vw;
+            }
+
+            #btn svg {
+                width: 24vw;
+                height: 24vw;
+            }
         }
 
         @keyframes gelatine {
@@ -182,9 +199,42 @@
     <script defer>
         let count
 
+        const renderIcon = (target, templateId) => {
+            const fragment = document.getElementById(templateId).content.cloneNode(true)
+
+            // Keep the icon visible if a browser does not start dynamically
+            // inserted SVG/SMIL animations. Active animations still override
+            // these base values and play normally.
+            fragment.querySelectorAll('animate, set').forEach((animation) => {
+                const attributeName = animation.getAttribute('attributeName')
+                const values = animation.getAttribute('values')
+                const finalValue = animation.getAttribute('to')
+                    || (values && values.split(';').pop())
+
+                if (attributeName && finalValue !== null) {
+                    animation.parentElement.setAttribute(attributeName, finalValue)
+                }
+            })
+
+            while (target.firstChild) {
+                target.removeChild(target.firstChild)
+            }
+            target.appendChild(fragment)
+
+            const svg = target.querySelector('svg')
+            requestAnimationFrame(() => {
+                if (svg && typeof svg.setCurrentTime === 'function') {
+                    svg.setCurrentTime(0)
+                    if (typeof svg.unpauseAnimations === 'function') {
+                        svg.unpauseAnimations()
+                    }
+                }
+            })
+        }
+
         const addMushroom = () => {
             const span = document.createElement('span')
-            span.innerHTML = document.getElementById('raw').innerHTML
+            renderIcon(span, 'raw')
             span.classList.add('raw')
             span.onclick = chop
             document.getElementById('container').appendChild(span)
@@ -192,14 +242,15 @@
         }
 
         const chop = async () => {
-            document.getElementById('btn').innerHTML = document.getElementById('reset-btn').innerHTML
+            renderIcon(document.getElementById('btn'), 'reset-btn')
             document.getElementById('btn').onclick = init
 
             const randVal = Math.floor(Math.random() * count)
             for (let i = 0; i < count; i++) {
-                document.querySelectorAll('span')[i].innerHTML = document.getElementById(
+                renderIcon(
+                    document.querySelectorAll('span')[i],
                     i > randVal ? 'chopped' : 'survived'
-                ).innerHTML
+                )
                 await new Promise((r) => setTimeout(r, 200))
             }
         }
@@ -212,7 +263,7 @@
             await new Promise((r) => setTimeout(r, 200))
             addMushroom()
             await new Promise((r) => setTimeout(r, 200))
-            document.getElementById('btn').innerHTML = document.getElementById('add-btn').innerHTML
+            renderIcon(document.getElementById('btn'), 'add-btn')
             document.getElementById('btn').onclick = addMushroom
         }
 
